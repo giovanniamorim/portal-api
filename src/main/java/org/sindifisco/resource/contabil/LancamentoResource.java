@@ -47,6 +47,14 @@ public class LancamentoResource {
                         NOT_FOUND, "Lançamento não encontrado"));
     }
 
+    @GetMapping()
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Lancamento> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return lancamentoRepository.findAll(pageable);
+    }
+
 
     @GetMapping("/receitas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
