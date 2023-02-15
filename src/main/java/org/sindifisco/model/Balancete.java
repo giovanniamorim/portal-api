@@ -18,6 +18,7 @@ public class Balancete {
     private Long id;
     private Long ano;
     private String mes;
+    private String descricao;
     private String fileUrl;
 
 }

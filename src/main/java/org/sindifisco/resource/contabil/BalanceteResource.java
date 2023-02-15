@@ -2,6 +2,7 @@ package org.sindifisco.resource.contabil;
 
 
 import org.sindifisco.model.Balancete;
+import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.contabil.balancete.BalanceteRepository;
 import org.sindifisco.repository.filter.BalanceteFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,15 +36,21 @@ public class BalanceteResource {
         return balanceteRepository.save(balancete);
     }
 
+    @GetMapping("/todos")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Balancete> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return balanceteRepository.findAll(pageable);
+    }
+
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Balancete> pesquisar(
-            BalanceteFilter balanceteFilter,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return balanceteRepository.filtrar(balanceteFilter, pageable);
+    public Page<Balancete> pesquisar(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return balanceteRepository.findAll(pageable);
+
+
     }
 
     @GetMapping("/{id}")
@@ -72,6 +79,7 @@ public class BalanceteResource {
                 .map(balancete -> {
                     balancete.setAno(newBalancete.getAno());
                     balancete.setMes(newBalancete.getMes());
+                    balancete.setDescricao(newBalancete.getDescricao());
                     balancete.setFileUrl((newBalancete.getFileUrl()));
                     Balancete balanceteUpdated = balanceteRepository.save(balancete);
                     return ResponseEntity.ok().body(balanceteUpdated);
