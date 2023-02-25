@@ -5,19 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "orc_execucao")
-public class Execucao {
+@Table(name = "doc_regimento")
+public class Regimento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long ano;
-    private String mes;
+    private Date dataAprovacao;
     private String descricao;
     private String fileUrl;
+
 }

@@ -1,6 +1,7 @@
 package org.sindifisco.resource.contabil;
 
 
+import org.sindifisco.model.Balancete;
 import org.sindifisco.model.Planejamento;
 import org.sindifisco.repository.contabil.planejamento.PlanejamentoRepository;
 import org.sindifisco.repository.filter.PlanejamentoFilter;
@@ -32,6 +33,14 @@ public class PlanejamentoResource {
     @PreAuthorize("hasAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
     public Planejamento addPlanejamento(@RequestBody @Valid Planejamento planejamento)  {
         return planejamentoRepository.save(planejamento);
+    }
+
+    @GetMapping("/todos")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Planejamento> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return planejamentoRepository.findAll(pageable);
     }
 
     @GetMapping

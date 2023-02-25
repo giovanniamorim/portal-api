@@ -70,7 +70,6 @@ public class LancamentoResource {
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
-
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_DELETE') and #oauth2.hasScope('write')")

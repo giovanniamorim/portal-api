@@ -1,6 +1,7 @@
 package org.sindifisco.resource.contabil;
 
 
+import org.sindifisco.model.Balancete;
 import org.sindifisco.model.Execucao;
 import org.sindifisco.repository.contabil.execucao.ExecucaoRepository;
 import org.sindifisco.repository.filter.ExecucaoFilter;
@@ -44,6 +45,14 @@ public class ExecucaoResource {
         return execucaoRepository.filtrar(execucaoFilter, pageable);
     }
 
+    @GetMapping("/todas")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Execucao> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return execucaoRepository.findAll(pageable);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Execucao findExecucaoById(@PathVariable Long id) {
@@ -69,6 +78,7 @@ public class ExecucaoResource {
                return execucaoRepository.findById(id)
                 .map(execucao -> {
                     execucao.setAno(newExecucao.getAno());
+                    execucao.setMes((newExecucao.getMes()));
                     execucao.setDescricao(newExecucao.getDescricao());
                     execucao.setFileUrl((newExecucao.getFileUrl()));
                     Execucao execucaoUpdated = execucaoRepository.save(execucao);

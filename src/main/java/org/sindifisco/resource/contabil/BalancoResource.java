@@ -1,6 +1,7 @@
 package org.sindifisco.resource.contabil;
 
 
+import org.sindifisco.model.Assembleia;
 import org.sindifisco.model.Balanco;
 import org.sindifisco.repository.contabil.balanco.BalancoRepository;
 import org.sindifisco.repository.filter.BalancoFilter;
@@ -33,6 +34,15 @@ public class BalancoResource {
     public Balanco addBalanco(@RequestBody @Valid Balanco balanco)  {
         return balancoRepository.save(balanco);
     }
+
+    @GetMapping("/todos")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Balanco> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return balancoRepository.findAll(pageable);
+    }
+
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
@@ -70,6 +80,7 @@ public class BalancoResource {
                 .map(balanco -> {
                     balanco.setAno(newBalanco.getAno());
                     balanco.setMes(newBalanco.getMes());
+                    balanco.setDescricao((newBalanco.getDescricao()));
                     balanco.setFileUrl((newBalanco.getFileUrl()));
                     Balanco balancoUpdated = balancoRepository.save(balanco);
                     return ResponseEntity.ok().body(balancoUpdated);

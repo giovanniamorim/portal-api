@@ -2,6 +2,7 @@ package org.sindifisco.resource.contabil;
 
 
 import org.sindifisco.model.Assembleia;
+import org.sindifisco.model.Balancete;
 import org.sindifisco.repository.contabil.assembleia.AssembleiaRepository;
 import org.sindifisco.repository.filter.AssembleiaFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,14 @@ public class AssembleiaResource {
     @PreAuthorize("hasAnyAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
     public Assembleia addInventari(@RequestBody @Valid Assembleia assembleia)  {
         return assembleiaRepository.save(assembleia);
+    }
+
+    @GetMapping("/todas")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Assembleia> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return assembleiaRepository.findAll(pageable);
     }
 
     @GetMapping

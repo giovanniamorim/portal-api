@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("algamoney")
 public class ApiProperty {
 	
+//	private String origemPermitida = "https://app-47609.dc-us-1.absamcloud.com:443";
 	private String origemPermitida = "http://localhost:3000";
 
 	private final Seguranca seguranca = new Seguranca();

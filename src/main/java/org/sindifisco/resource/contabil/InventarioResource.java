@@ -1,5 +1,6 @@
 package org.sindifisco.resource.contabil;
 
+import org.sindifisco.model.Balancete;
 import org.sindifisco.model.Inventario;
 import org.sindifisco.repository.contabil.inventario.InventarioRepository;
 import org.sindifisco.repository.filter.InventarioFilter;
@@ -42,6 +43,14 @@ public class InventarioResource {
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return inventarioRepository.filtrar(inventarioFilter, pageable);
+    }
+
+    @GetMapping("/todos")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Inventario> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return inventarioRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")

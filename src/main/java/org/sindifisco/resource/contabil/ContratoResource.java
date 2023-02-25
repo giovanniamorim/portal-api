@@ -2,6 +2,7 @@ package org.sindifisco.resource.contabil;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.sindifisco.model.Assembleia;
 import org.sindifisco.model.Contrato;
 import org.sindifisco.repository.contabil.contrato.ContratoRepository;
 import org.sindifisco.repository.filter.ContratoFilter;
@@ -33,6 +34,14 @@ public class ContratoResource {
     @PreAuthorize("hasAnyAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
     public Contrato addContrato(@RequestBody @Valid Contrato contrato)  {
         return contratoRepository.save(contrato);
+    }
+
+    @GetMapping("/todos")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Contrato> getAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return contratoRepository.findAll(pageable);
     }
 
     @GetMapping
