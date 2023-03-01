@@ -20,14 +20,35 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf()
-				.disable()
+		http
 				.authorizeRequests()
 				.antMatchers(HttpMethod.GET,"/api/file/download/*")
 				.permitAll()
 				.anyRequest().authenticated()
 				.and()
+				.csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		http
+				.logout(
+				httpSecurityLogoutConfigurer -> {
+					httpSecurityLogoutConfigurer.logoutSuccessHandler(
+							(httpServletRequest, httpServletResponse, authentication) -> {
+								var origin = httpServletRequest.getHeader("origin");
+								httpServletResponse.sendRedirect(origin);
+							}
+					);
+				}
+		);
+
+//		http.csrf()
+//				.disable()
+//				.authorizeRequests()
+//				.antMatchers(HttpMethod.GET,"/api/file/download/*")
+//				.permitAll()
+//				.anyRequest().authenticated()
+//				.and()
+//				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 	
 	@Override
