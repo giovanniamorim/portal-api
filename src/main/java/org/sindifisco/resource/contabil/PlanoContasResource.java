@@ -1,11 +1,14 @@
 package org.sindifisco.resource.contabil;
 
+import org.sindifisco.model.Planejamento;
 import org.sindifisco.model.PlanoContas;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +36,14 @@ public class PlanoContasResource {
         return planoContasRepository.save(conta);
     }
 
+    @GetMapping()
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<PlanoContas> findAll(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        return planoContasRepository.findAll(pageable);
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public PlanoContas findById(@PathVariable Long id) {
@@ -41,11 +52,6 @@ public class PlanoContasResource {
                         NOT_FOUND, "Conta não encontrado"));
     }
 
-    @GetMapping()
-    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<PlanoContas> getAll(Pageable pageable) {
-        return planoContasRepository.findAll(pageable);
-    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
