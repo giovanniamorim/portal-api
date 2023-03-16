@@ -37,12 +37,9 @@ public class ExecucaoResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Execucao> pesquisar(
-            ExecucaoFilter execucaoFilter,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return execucaoRepository.filtrar(execucaoFilter, pageable);
+    public Page<Execucao> listAll(
+            @PageableDefault(page = 0, size = 5, sort = "ano", direction = Sort.Direction.DESC) Pageable pageable) {
+        return execucaoRepository.findAll(pageable);
     }
 
     @GetMapping("/todas")

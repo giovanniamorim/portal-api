@@ -56,6 +56,12 @@ public class UserResource {
 					usuario.setNome(userUpdated.getNome());
 					usuario.setEmail(userUpdated.getEmail());
 					usuario.setSenha(encoder.encode(userUpdated.getSenha()));
+					usuario.setCelular(userUpdated.getCelular());
+					usuario.setCpf(userUpdated.getCpf());
+					usuario.setRg(userUpdated.getRg());
+					usuario.setRgOrgaoExp(userUpdated.getRgOrgaoExp());
+					usuario.setMatricula(userUpdated.getMatricula());
+					usuario.setSituacao(userUpdated.getSituacao());
 					usuario.setPermissoes(userUpdated.getPermissoes());
 
 					Usuario putUsuario = userRepository.save(usuario);

@@ -6,9 +6,12 @@ CREATE TABLE ctb_lancamento (
 	valor DECIMAL(19,2) NOT NULL,
 	modo_pagamento VARCHAR(50) NOT NULL,
 	tipo_comprovante VARCHAR(50) NOT NULL,
+	num_doc VARCHAR(30),
+	num_cheque VARCHAR(30),
 	obs VARCHAR(255) NOT NULL,
 	sup_caixa VARCHAR(5) NOT NULL,
-	file_url VARCHAR(255) NOT NULL
+	file_url VARCHAR(255) NOT NULL,
+	ano_exercicio INT(5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

@@ -18,6 +18,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.persistence.Table;
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
 
@@ -63,12 +65,15 @@ public class LancamentoResource {
         return lancamentoRepository.findByTipoLancamento("Receita", pageable);
     }
 
+
+
     @GetMapping("/despesas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllDespesas(
             @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
@@ -92,8 +97,11 @@ public class LancamentoResource {
                     lancamento.setValor((updatedLancamento.getValor()));
                     lancamento.setModoPagamento(updatedLancamento.getModoPagamento());
                     lancamento.setTipoComprovante(updatedLancamento.getTipoComprovante());
+                    lancamento.setNumDoc(updatedLancamento.getNumDoc());
+                    lancamento.setNumCheque(updatedLancamento.getNumCheque());
                     lancamento.setObs(updatedLancamento.getObs());
                     lancamento.setSupCaixa(updatedLancamento.getSupCaixa());
+                    lancamento.setAnoExercicio(updatedLancamento.getAnoExercicio());
                     lancamento.setFileUrl(updatedLancamento.getFileUrl());
 
                     Lancamento putLancamento = lancamentoRepository.save(lancamento);

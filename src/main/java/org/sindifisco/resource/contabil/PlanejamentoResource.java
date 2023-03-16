@@ -45,12 +45,9 @@ public class PlanejamentoResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Planejamento> pesquisar(
-            PlanejamentoFilter planejamentoFilter,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return planejamentoRepository.filtrar(planejamentoFilter, pageable);
+    public Page<Planejamento> listAll(
+            @PageableDefault(page = 0, size = 5, sort = "ano", direction = Sort.Direction.DESC) Pageable pageable) {
+        return planejamentoRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")

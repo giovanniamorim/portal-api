@@ -46,12 +46,9 @@ public class ContratoResource {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Contrato> pesquisar(
-            ContratoFilter contratoFilter,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+    public Page<Contrato> listAll(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return contratoRepository.filtrar(contratoFilter, pageable);
+        return contratoRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")

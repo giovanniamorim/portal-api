@@ -10,6 +10,17 @@ public class LancamentoFilter {
 	private LocalDate dataVencimentoDe;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataVencimentoAte;
+
+	private Double valor;
+
+	public Double getValor() {
+		return valor;
+	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
+	}
+
 	public String getDescricao() {
 		return descricao;
 	}

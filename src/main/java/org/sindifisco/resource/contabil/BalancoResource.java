@@ -46,12 +46,9 @@ public class BalancoResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Balanco> pesquisar(
-            BalancoFilter balancoFilter,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return balancoRepository.filtrar(balancoFilter, pageable);
+    public Page<Balanco> listAll(
+            @PageableDefault(page = 0, size = 5, sort = "ano", direction = Sort.Direction.DESC) Pageable pageable) {
+        return balancoRepository.findAll(pageable);
     }
 
     @GetMapping("/{id}")

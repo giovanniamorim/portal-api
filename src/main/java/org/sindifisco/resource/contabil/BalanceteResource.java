@@ -47,10 +47,9 @@ public class BalanceteResource {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Balancete> pesquisar(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<Balancete> listAll(
+            @PageableDefault(page = 0, size = 5, sort = "ano", direction = Sort.Direction.DESC) Pageable pageable) {
         return balanceteRepository.findAll(pageable);
-
-
     }
 
     @GetMapping("/{id}")
