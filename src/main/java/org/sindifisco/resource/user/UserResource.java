@@ -1,10 +1,9 @@
 package org.sindifisco.resource.user;
 
-import org.sindifisco.model.Assembleia;
-import org.sindifisco.model.Lancamento;
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.sindifisco.security.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.validation.Valid;
-import java.net.URI;
+import java.util.Optional;
 
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
@@ -30,6 +29,9 @@ public class UserResource {
 	@Autowired
 	private final UsuarioRepository userRepository;
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+	@Autowired
+	private final AppUserDetailsService appUserDetailsService;
 
 
 	@GetMapping()
@@ -73,10 +75,20 @@ public class UserResource {
 	}
 
 	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 	public Usuario findUserById(@PathVariable Long codigo) {
 		return userRepository.findById(codigo)
 				.orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado"));
+	}
+
+	@GetMapping("/perfil")
+	@ResponseBody
+	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+	public Optional<Usuario> findByEmail(@RequestParam("email") String email) {
+		Optional<Usuario> usuario = userRepository.findByEmail(email);
+
+		return usuario;
 	}
 
 	@DeleteMapping("/{codigo}")

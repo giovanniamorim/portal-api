@@ -3,9 +3,12 @@ package org.sindifisco.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,8 +24,7 @@ public class Lancamento {
     private String tipoLancamento;
     private Date dataLancamento;
     @NotNull(message = "O campo Conta é obrigatório")
-    @OneToOne
-    private PlanoContas planoConta;
+    private String planoConta;
     private Double valor;
     private String modoPagamento;
     private String tipoComprovante;
@@ -32,4 +34,9 @@ public class Lancamento {
     private String supCaixa;
     private Integer anoExercicio;
     private String fileUrl;
+    @CreationTimestamp
+    private Date created;
+    @UpdateTimestamp
+    private Date updated;
+
 }

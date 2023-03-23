@@ -61,7 +61,7 @@ public class LancamentoResource {
     @GetMapping("/receitas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllReceitas(
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Receita", pageable);
     }
 
@@ -70,7 +70,7 @@ public class LancamentoResource {
     @GetMapping("/despesas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllDespesas(
-            @PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
