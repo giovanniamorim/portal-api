@@ -10,7 +10,7 @@ import org.sindifisco.config.property.ApiProperty;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ApiProperty.class, FileStorageConfig.class})
+@EnableConfigurationProperties({ApiProperty.class})
 public class PortalApplication extends SpringBootServletInitializer {
 
 	@Override
