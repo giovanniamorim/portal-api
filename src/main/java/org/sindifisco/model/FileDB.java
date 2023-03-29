@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "files")
-public class FileDb {
+public class FileDB {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class FileDb {
     @Lob
     private byte[] data;
 
-    public FileDb(String name, String type, byte[] data) {
+    public FileDB(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;
         this.data = data;

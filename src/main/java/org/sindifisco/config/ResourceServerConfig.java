@@ -22,7 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers(HttpMethod.GET,"/api/file/download/*")
+				.antMatchers(HttpMethod.GET,"/api/file/*")
 				.permitAll()
 				.anyRequest().authenticated()
 				.and()
@@ -41,16 +41,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				}
 		);
 
-//		http.csrf()
-//				.disable()
-//				.authorizeRequests()
-//				.antMatchers(HttpMethod.GET,"/api/file/download/*")
-//				.permitAll()
-//				.anyRequest().authenticated()
-//				.and()
-//				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
+
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.stateless(true);

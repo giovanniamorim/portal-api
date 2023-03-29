@@ -3,8 +3,6 @@ package org.sindifisco.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,9 +32,20 @@ public class Lancamento {
     private String supCaixa;
     private Integer anoExercicio;
     private String fileUrl;
-    @CreationTimestamp
-    private Date created;
-    @UpdateTimestamp
-    private Date updated;
+
+    private LocalDateTime created;
+    private LocalDateTime updated;
+
+    @PrePersist
+    public void prePersist() {
+        created = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updated = LocalDateTime.now();
+    }
+
+
 
 }

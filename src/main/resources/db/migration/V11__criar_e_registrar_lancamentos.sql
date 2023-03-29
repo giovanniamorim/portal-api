@@ -12,8 +12,8 @@ CREATE TABLE ctb_lancamento (
 	sup_caixa VARCHAR(5) NOT NULL,
 	file_url VARCHAR(255) NOT NULL,
 	ano_exercicio INT(5),
-	created DATETIME DEFAULT NULL,
-	updated DATETIME DEFAULT NULL
+	created TIMESTAMP DEFAULT NULL,
+	updated TIMESTAMP DEFAULT NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

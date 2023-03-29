@@ -81,7 +81,7 @@ public class ContratoResource {
                     contrato.setDataInicial(newContrato.getDataFinal());
                     contrato.setObs(newContrato.getObs());
                     contrato.setValor(newContrato.getValor());
-                    contrato.setFileUrl((newContrato.getFileUrl()));
+                    contrato.setFile((newContrato.getFile()));
                     Contrato contratoUpdated = contratoRepository.save(contrato);
                     return ResponseEntity.ok().body(contratoUpdated);
                 }).orElseThrow(() -> new ResponseStatusException(
