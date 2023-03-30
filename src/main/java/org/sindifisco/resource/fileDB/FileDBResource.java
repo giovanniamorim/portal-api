@@ -41,9 +41,8 @@ public class FileDBResource {
     @PostMapping("/files/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-
-        if(filesService.findByName(file.getOriginalFilename()).equals(file.getOriginalFilename())){
-            message = "Já existe um arquivo com o nome: " + file.getOriginalFilename();
+        if(fileDBRepository.existsByName(file.getOriginalFilename())){
+            message = "Já existe um arquivo com o nome: " + file.getOriginalFilename() + ". Acesse o gerenciador de arquivos e delete-o primeiramente";
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } else {
             try {
