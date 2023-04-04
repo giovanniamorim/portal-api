@@ -63,8 +63,8 @@ public class BalancoResource {
     @ResponseStatus(NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_DELETE') and #oauth2.hasScope('write')")
     public void deleteBalanco(@PathVariable Long id) {
-        balancoRepository.findById(id).map(user -> {
-            balancoRepository.delete(user);
+        balancoRepository.findById(id).map(balanco -> {
+            balancoRepository.delete(balanco);
             return TYPE;
         }).orElseThrow(() -> new ResponseStatusException(
                 NOT_FOUND, "Balanco não encontrado"));

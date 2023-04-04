@@ -10,7 +10,7 @@ CREATE TABLE ctb_lancamento (
 	num_cheque VARCHAR(30),
 	obs VARCHAR(255) NOT NULL,
 	sup_caixa VARCHAR(5) NOT NULL,
-	file_url VARCHAR(255) NOT NULL,
+	file_url VARCHAR(255),
 	ano_exercicio INT(5),
 	created TIMESTAMP DEFAULT NULL,
 	updated TIMESTAMP DEFAULT NULL

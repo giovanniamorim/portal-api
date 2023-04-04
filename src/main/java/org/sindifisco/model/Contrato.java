@@ -23,8 +23,6 @@ public class Contrato {
     private Date dataFinal;
     private String obs;
     private Double valor;
-    @Lob
-    @Column(name="file", columnDefinition="BLOB")
     private String file;
 
 }
