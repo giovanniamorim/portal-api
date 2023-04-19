@@ -7,6 +7,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import org.sindifisco.config.property.ApiProperty;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+
+import java.util.Properties;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ApiProperty.class})
@@ -20,7 +25,6 @@ public class PortalApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(PortalApplication.class, args);
 	}
-
 
 
 }

@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 
+import static org.springframework.http.HttpMethod.POST;
+
 @EnableResourceServer
 @Profile("oauth-security")
 @SuppressWarnings("deprecation")
@@ -22,8 +24,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers(HttpMethod.GET,"/api/file/*")
-				.permitAll()
+				.antMatchers("/api/forgot-password**").permitAll()
+				.antMatchers("/api/reset-password**").permitAll()
+				.antMatchers(POST, "/api/usuarios/{codigo}/changePassword").authenticated() // require authentication for POST requests to this endpoint
 				.anyRequest().authenticated()
 				.and()
 				.csrf().disable()
