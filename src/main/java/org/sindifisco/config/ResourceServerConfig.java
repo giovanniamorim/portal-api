@@ -26,7 +26,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/api/forgot-password**").permitAll()
 				.antMatchers("/api/reset-password**").permitAll()
-				.antMatchers(POST, "/api/usuarios/{codigo}/changePassword").authenticated() // require authentication for POST requests to this endpoint
 				.anyRequest().authenticated()
 				.and()
 				.csrf().disable()

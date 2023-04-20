@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
@@ -33,14 +35,13 @@ public class UserResource {
 
 	@Autowired
 	private final AppUserDetailsService appUserDetailsService;
-
+	private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
 	@GetMapping()
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 	public Page<Usuario> listAllUsers(@PageableDefault(size = 5, sort = "codigo", direction = Sort.Direction.DESC) Pageable pageable){
 		return userRepository.findAll(pageable);
 	}
-
 
 	@PostMapping
 	@ResponseStatus(CREATED)
@@ -72,7 +73,6 @@ public class UserResource {
 					return ResponseEntity.ok().body(putUsuario);
 				}).orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado"));
-
 	}
 
 	@GetMapping("/{codigo}")
@@ -103,28 +103,39 @@ public class UserResource {
 				NOT_FOUND, "Usuário não encontrado"));
 	}
 
-	@PostMapping("/{codigo}/changePassword")
-	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-	public ResponseEntity<?> changePassword(@PathVariable Long codigo, @RequestBody @Valid ChangePasswordRequest request) {
-		Usuario user = userRepository.findById(codigo)
+	@PutMapping("/change/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
+	public ResponseEntity<?> changePassword(@PathVariable Long codigo, @Valid @RequestBody ChangePasswordRequest request){
+
+		Usuario userCheck = userRepository.findById(codigo)
 				.orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado para o ID: " + codigo));
+		LOGGER.info("userCheck: " + userCheck);
 
 		// Check if old password matches
-		if (!new BCryptPasswordEncoder().matches(request.getOldPassword(), user.getSenha())) {
-			return ResponseEntity.badRequest().body("A senha antiga está incorreta");
+		if (!encoder.matches(request.getOldPassword(), userCheck.getSenha())) {
+			LOGGER.info("Verificou senha antiga");
+			return ResponseEntity.badRequest().body("Senha antiga não confere");
 		}
-
 		// Check if new password and confirmation match
 		if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-			return ResponseEntity.badRequest().body("Nova senha e confirmação não correspondem");
+			LOGGER.info("Confirmação de senha verificada");
+			return ResponseEntity.badRequest().body("Erro ao confirmar a senha nova");
 		}
 
-		// Update user's password
-		user.setSenha(new BCryptPasswordEncoder().encode(request.getNewPassword()));
-		userRepository.save(user);
+		return userRepository.findById(codigo)
+				.map(usuario -> {
+					usuario.setSenha(encoder.encode(request.getNewPassword()));
 
-		return ResponseEntity.ok("Senha alterada com sucesso!");
+					Usuario putUsuario = userRepository.save(usuario);
+
+					return ResponseEntity.ok().body(putUsuario);
+				}).orElseThrow(() -> new ResponseStatusException(
+						NOT_FOUND, "Usuário não encontrado"));
 	}
+
+
+
+
 
 }

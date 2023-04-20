@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,6 +40,7 @@ public class FileDBResource {
     private FileDBRepository fileDBRepository;
 
     @PostMapping("/files/upload")
+    @PreAuthorize("hasAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
         if(fileDBRepository.existsByName(file.getOriginalFilename())){
@@ -58,6 +60,7 @@ public class FileDBResource {
     }
 
     @GetMapping("/files/list")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<FileDB> getAll(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable){
@@ -67,6 +70,7 @@ public class FileDBResource {
 
 
     @GetMapping("/files")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = filesService.getAllFiles().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
@@ -86,6 +90,7 @@ public class FileDBResource {
     }
 
     @GetMapping("/file/find")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@RequestParam String name) {
         FileDB fileDB = filesService.findByName(name);
 
@@ -95,6 +100,7 @@ public class FileDBResource {
     }
 
     @GetMapping("/file/{id}")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         FileDB fileDB = filesService.getFile(id);
 
@@ -104,6 +110,7 @@ public class FileDBResource {
     }
 
     @PutMapping("/file/{id}")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
     public ResponseEntity<FileDB> updateFile(
             @PathVariable Long id, @Valid @RequestBody FileDB newFileDB, @RequestParam("file") MultipartFile file){
         return fileDBRepository.findById(id)

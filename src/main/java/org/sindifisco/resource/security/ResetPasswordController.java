@@ -28,6 +28,7 @@ public class ResetPasswordController {
         String password = request.get("password");
 
         PasswordResetToken passwordResetToken = userService.getPasswordResetToken(token);
+
         if(passwordResetToken == null){
             return ResponseEntity.badRequest().body("Token Inválido");
         }
