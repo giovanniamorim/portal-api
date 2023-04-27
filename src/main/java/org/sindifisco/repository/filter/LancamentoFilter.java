@@ -2,46 +2,29 @@ package org.sindifisco.repository.filter;
 
 import java.time.LocalDate;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Getter
+@Setter
 public class LancamentoFilter {
-	private String descricao;
+
+	private Long id;
+	private String tipoLancamento;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dataVencimentoDe;
+	private LocalDate dataLancamentoDe;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private LocalDate dataVencimentoAte;
+	private LocalDate dataLancamentoAte;
+	private String planoConta;
+	private String modoPagamento;
+	private String tipoComprovante;
+	private String numDoc;
+	private String numCheque;
+	private String supCaixa;
+	private Integer anoExercicio;
+	private Double valorMin;
+	private Double valorMax;
 
-	private Double valor;
 
-	public Double getValor() {
-		return valor;
-	}
-
-	public void setValor(Double valor) {
-		this.valor = valor;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-
-	public LocalDate getDataVencimentoDe() {
-		return dataVencimentoDe;
-	}
-
-	public void setDataVencimentoDe(LocalDate dataVencimentoDe) {
-		this.dataVencimentoDe = dataVencimentoDe;
-	}
-
-	public LocalDate getDataVencimentoAte() {
-		return dataVencimentoAte;
-	}
-
-	public void setDataVencimentoAte(LocalDate dataVencimentoAte) {
-		this.dataVencimentoAte = dataVencimentoAte;
-	}
 }

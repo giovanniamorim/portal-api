@@ -2,9 +2,10 @@ package org.sindifisco.resource.contabil;
 
 
 import org.sindifisco.model.Lancamento;
-import org.sindifisco.repository.LancamentoRepository;
+import org.sindifisco.repository.lancamento.LancamentoRepository;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.sindifisco.repository.filter.LancamentoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ import static org.springframework.http.HttpStatus.*;
 public class LancamentoResource {
     @Autowired
     LancamentoRepository lancamentoRepository;
+    Pageable unpaged = Pageable.unpaged();
+
 
     @Autowired
     private PlanoContasRepository planoContasRepository;
@@ -66,12 +69,18 @@ public class LancamentoResource {
     }
 
 
-
     @GetMapping("/despesas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllDespesas(
+
             @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
+    }
+
+    @GetMapping("/busca")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public Page<Lancamento> buscaAvancada( LancamentoFilter lancamentoFilter, Pageable pageable){
+        return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
 
 

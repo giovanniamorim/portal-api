@@ -90,7 +90,7 @@ public class FileDBResource {
     }
 
     @GetMapping("/file/find")
-    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@RequestParam String name) {
         FileDB fileDB = filesService.findByName(name);
 
@@ -100,7 +100,7 @@ public class FileDBResource {
     }
 
     @GetMapping("/file/{id}")
-    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         FileDB fileDB = filesService.getFile(id);
 

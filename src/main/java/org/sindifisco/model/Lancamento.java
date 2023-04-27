@@ -3,9 +3,11 @@ package org.sindifisco.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -20,7 +22,8 @@ public class Lancamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String tipoLancamento;
-    private Date dataLancamento;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataLancamento;
     @NotNull(message = "O campo Conta é obrigatório")
     private String planoConta;
     private Double valor;
