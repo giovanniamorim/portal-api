@@ -1,5 +1,6 @@
 package org.sindifisco.resource.user;
 
+import org.sindifisco.UsuarioDTO;
 import org.sindifisco.model.ChangePasswordRequest;
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,27 +46,72 @@ public class UserResource {
 	@PostMapping
 	@ResponseStatus(CREATED)
 	@PreAuthorize("hasAnyAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
-	public Usuario addUsuario(@RequestBody @Valid Usuario user)  {
+	public ResponseEntity<?> addUsuario(@RequestBody @Valid Usuario user)  {
+		if(!user.getSenha().equals(user.getConfirmarSenha())){
+			return ResponseEntity.badRequest().body("As senhas não correspondem");
+		}
 		user.setSenha(encoder.encode(user.getSenha()));
-		return userRepository.save(user);
+		user.setConfirmarSenha(encoder.encode(user.getConfirmarSenha()));
+		return ResponseEntity.ok(userRepository.save(user));
 	}
 
+//	@PutMapping("{codigo}")
+//	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+//	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
+//
+//		return userRepository.findById(codigo)
+//				.map(usuario -> {
+//					usuario.setNome(userUpdated.getNome());
+//					usuario.setEmail(userUpdated.getEmail());
+//					usuario.setCelular(userUpdated.getCelular());
+//					usuario.setCpf(userUpdated.getCpf());
+//					usuario.setRg(userUpdated.getRg());
+//					usuario.setRgOrgaoExp(userUpdated.getRgOrgaoExp());
+//					usuario.setMatricula(userUpdated.getMatricula());
+//					usuario.setSituacao(userUpdated.getSituacao());
+//
+//
+//					Usuario putUsuario = userRepository.save(usuario);
+//
+//					return ResponseEntity.ok().body(putUsuario);
+//				}).orElseThrow(() -> new ResponseStatusException(
+//						NOT_FOUND, "Usuário não encontrado"));
+//	}
+
 	@PutMapping("{codigo}")
-	@PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
-	public ResponseEntity<Usuario> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
+	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
 
 		return userRepository.findById(codigo)
 				.map(usuario -> {
 					usuario.setNome(userUpdated.getNome());
 					usuario.setEmail(userUpdated.getEmail());
-					usuario.setSenha(encoder.encode(userUpdated.getSenha()));
 					usuario.setCelular(userUpdated.getCelular());
 					usuario.setCpf(userUpdated.getCpf());
 					usuario.setRg(userUpdated.getRg());
 					usuario.setRgOrgaoExp(userUpdated.getRgOrgaoExp());
 					usuario.setMatricula(userUpdated.getMatricula());
 					usuario.setSituacao(userUpdated.getSituacao());
-					usuario.setPermissoes(userUpdated.getPermissoes());
+
+					LOGGER.info("Valor do userUpdate getSenha:" + userUpdated.getSenha());
+					LOGGER.info("Valor do usuario getSenha:" + usuario.getSenha());
+
+					if(userUpdated.getSenha().isEmpty() || userUpdated.getSenha().isBlank()){
+						LOGGER.info("userUpdated Está vazio?:" + userUpdated.getSenha().isEmpty());
+						LOGGER.info("userUpdated Está em branco?:" + userUpdated.getSenha().isBlank());
+						usuario.setSenha(usuario.getSenha());
+						usuario.setConfirmarSenha(usuario.getConfirmarSenha());
+					}
+					if(userUpdated.getSenha().equals(usuario.getSenha())){
+						LOGGER.info("uma é igual a outra?" + userUpdated.getSenha().equals(usuario.getSenha()));
+						usuario.setSenha(usuario.getSenha());
+					}
+
+					if(!userUpdated.getSenha().isEmpty() || !userUpdated.getSenha().isBlank()){
+						usuario.setSenha(encoder.encode(userUpdated.getSenha()));
+						usuario.setConfirmarSenha(encoder.encode(userUpdated.getConfirmarSenha()));
+						LOGGER.info("Caiu terceito if" + usuario);
+					}
 
 					Usuario putUsuario = userRepository.save(usuario);
 
@@ -104,7 +149,7 @@ public class UserResource {
 	}
 
 	@PutMapping("/change/{codigo}")
-	@PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
+	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 	public ResponseEntity<?> changePassword(@PathVariable Long codigo, @Valid @RequestBody ChangePasswordRequest request){
 
 		Usuario userCheck = userRepository.findById(codigo)

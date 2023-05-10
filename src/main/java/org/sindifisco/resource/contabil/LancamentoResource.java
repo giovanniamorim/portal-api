@@ -18,9 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.Table;
 import javax.validation.Valid;
-
-import java.util.List;
-
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
 
@@ -64,7 +61,7 @@ public class LancamentoResource {
     @GetMapping("/receitas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllReceitas(
-            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
+             Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Receita", pageable);
     }
 
@@ -72,14 +69,15 @@ public class LancamentoResource {
     @GetMapping("/despesas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllDespesas(
-
             @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
     @GetMapping("/busca")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Lancamento> buscaAvancada( LancamentoFilter lancamentoFilter, Pageable pageable){
+    public Page<Lancamento> buscaAvancada(
+            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
+            LancamentoFilter lancamentoFilter, Pageable pageable){
         return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
 

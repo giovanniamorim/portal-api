@@ -1,11 +1,8 @@
-package org.sindifisco.resource.contabil;
-
+package org.sindifisco.resource.contrato;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sindifisco.model.Assembleia;
 import org.sindifisco.model.Contrato;
 import org.sindifisco.repository.contabil.contrato.ContratoRepository;
-import org.sindifisco.repository.filter.ContratoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +33,7 @@ public class ContratoResource {
         return contratoRepository.save(contrato);
     }
 
-    @GetMapping("/todos")
+    @GetMapping
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Contrato> getAll(
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
@@ -44,12 +41,6 @@ public class ContratoResource {
         return contratoRepository.findAll(pageable);
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Contrato> listAll(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return contratoRepository.findAll(pageable);
-    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_READ') and #oauth2.hasScope('read')")
@@ -77,11 +68,11 @@ public class ContratoResource {
                 .map(contrato -> {
                     contrato.setPrestador(newContrato.getPrestador());
                     contrato.setDescServico((newContrato.getDescServico()));
-                    contrato.setDataInicial(newContrato.getDataInicial());
-                    contrato.setDataInicial(newContrato.getDataFinal());
+                    contrato.setDataFinal(newContrato.getDataInicial());
+                    contrato.setDataFinal(newContrato.getDataFinal());
                     contrato.setObs(newContrato.getObs());
                     contrato.setValor(newContrato.getValor());
-                    contrato.setFile((newContrato.getFile()));
+                    contrato.setFileUrl((newContrato.getFileUrl()));
                     Contrato contratoUpdated = contratoRepository.save(contrato);
                     return ResponseEntity.ok().body(contratoUpdated);
                 }).orElseThrow(() -> new ResponseStatusException(

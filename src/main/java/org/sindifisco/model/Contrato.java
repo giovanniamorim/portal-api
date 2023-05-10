@@ -3,9 +3,10 @@ package org.sindifisco.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -18,12 +19,13 @@ public class Contrato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String prestador;
-    private  String descServico;
-    private Date dataInicial;
-    private Date dataFinal;
+    private String descServico;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataInicial;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataFinal;
     private String obs;
     private Double valor;
-    private String file;
+    private String fileUrl;
 
 }
-

@@ -23,6 +23,7 @@ public class Usuario {
 	private String nome;
 	private String email;
 	private String senha;
+	private String confirmarSenha;
 	private String celular;
 	@NotNull(message = "O campo CPF é obrigatório")
 	@CPF(message = "CPF invalido")

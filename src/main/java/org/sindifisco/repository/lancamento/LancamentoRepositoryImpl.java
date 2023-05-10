@@ -3,7 +3,6 @@ package org.sindifisco.repository.lancamento;
 
 import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.filter.LancamentoFilter;
-import org.sindifisco.repository.filter.metamodel.LancamentoMetaModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -122,7 +121,7 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
         if (lancamentoFilter.getAnoExercicio() != null) {
             LOGGER.info("Entrou no if anoExercicio: " + lancamentoFilter.getAnoExercicio());
             predicates.add(
-                    builder.lessThanOrEqualTo(
+                    builder.equal(
                             root.get("anoExercicio"), lancamentoFilter.getAnoExercicio()));
         }
 
@@ -143,7 +142,9 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
         return predicates.toArray(new Predicate[predicates.size()]);
     }
 
-    private void adicionarRestricoesDePaginacao(TypedQuery<?> query, Pageable pageable) {
+    private void adicionarRestricoesDePaginacao(
+            TypedQuery<?> query, Pageable pageable
+        ) {
         LOGGER.info("Entrou no adicionarRestricoesDePaginacao: " + query);
         int paginaAtual = pageable.getPageNumber();
         int totalRegistrosPorPagina = pageable.getPageSize();

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long>, LancamentoRepositoryQuery {
-    Pageable unpaged = Pageable.unpaged();
 
     Page<Lancamento> findByTipoLancamento(String tipoLancamento, Pageable pageable);
     

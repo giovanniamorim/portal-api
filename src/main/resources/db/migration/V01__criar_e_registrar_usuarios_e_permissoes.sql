@@ -3,6 +3,7 @@ CREATE TABLE usuario (
 	nome VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL,
 	senha VARCHAR(150) NOT NULL,
+	confirmar_senha(150),
 	celular VARCHAR(30),
 	cpf VARCHAR(15) NOT NULL,
 	rg VARCHAR(30),
@@ -24,9 +25,10 @@ CREATE TABLE usuario_permissao (
 	FOREIGN KEY (codigo_permissao) REFERENCES permissao(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO usuario (codigo, nome, email, senha, celular, cpf, rg, rg_orgao_exp, matricula, situacao) values (
+INSERT INTO usuario (codigo, nome, email, senha,confirmar_senha, celular, cpf, rg, rg_orgao_exp, matricula, situacao) values (
     1, 'Giovanni Amorim',
     'giovanni.amorim.ti@gmail.com',
+    '$2a$10$AjIhHcIKm/gbxOFXTTdCMuofMJaJ/n8D7xrGVpHt63JOWo1S1YXr.',
     '$2a$10$AjIhHcIKm/gbxOFXTTdCMuofMJaJ/n8D7xrGVpHt63JOWo1S1YXr.',
     '61981024595',
     '51189178249',
