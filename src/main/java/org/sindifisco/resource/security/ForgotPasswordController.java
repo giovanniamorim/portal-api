@@ -1,25 +1,21 @@
 package org.sindifisco.resource.security;
 
-import com.sun.mail.util.MailSSLSocketFactory;
+
 import org.sindifisco.model.Usuario;
 import org.sindifisco.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -35,21 +31,6 @@ public class ForgotPasswordController {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
-    @PostConstruct
-    public void init() throws GeneralSecurityException {
-        // Crie uma instância de MailSSLSocketFactory com a validação de hostname desativada
-        MailSSLSocketFactory socketFactory = new MailSSLSocketFactory();
-        socketFactory.setTrustAllHosts(true);
-
-        // Configure a propriedade mail.smtp.ssl.socketFactory com a instância criada
-        Properties props = new Properties();
-        props.put("mail.smtp.ssl.socketFactory", socketFactory);
-
-        // Configure a sessão SMTP com as propriedades configuradas
-        JavaMailSenderImpl sender = (JavaMailSenderImpl) mailSender;
-        sender.setJavaMailProperties(props);
-    }
-
     @PostMapping
     public ResponseEntity<?> processForgotPassword(@RequestBody Map<String, String> request) throws MessagingException, UnsupportedEncodingException {
         String email = request.get("email");
@@ -62,13 +43,16 @@ public class ForgotPasswordController {
         String token = UUID.randomUUID().toString();
         userService.createPasswordResetTokenForUser(user, token);
         LOGGER.info("criou o token: " + token);
-        String resetPasswordUrl = "https://app-47646.dc-us-1.absamcloud.com/portal-api/api/reset-password?token=" + token;
+        String resetPasswordUrl = "https://www.sindifisco.app.br/#/reset-password?token=" + token;
+
         LOGGER.info("criou a url: " + resetPasswordUrl);
+        LOGGER.info("enviou mensagem para o email: " + user.getEmail());
+
         // Send the reset password email to the user
         return sendResetPasswordEmail(user.getEmail(), resetPasswordUrl);
     }
 
-
+    @GetMapping("get-reset")
     private ResponseEntity<?> sendResetPasswordEmail(String email, String resetPasswordUrl) throws MessagingException, UnsupportedEncodingException {
 
         String mensagem = "Olá, <br><br>Recebemos uma solicitação para resetar sua senha no Portal Transparência. " +

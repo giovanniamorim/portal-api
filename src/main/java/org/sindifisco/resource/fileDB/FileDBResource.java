@@ -90,7 +90,6 @@ public class FileDBResource {
     }
 
     @GetMapping("/file/find")
-//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@RequestParam String name) {
         FileDB fileDB = filesService.findByName(name);
 
@@ -99,8 +98,22 @@ public class FileDBResource {
                 .body(fileDB.getData());
     }
 
+    @DeleteMapping("/file/deleteByName")
+    public ResponseEntity<?> getFileByName(@RequestParam String name) {
+        FileDB fileDB = filesService.findByName(name);
+        try {
+            fileDBRepository.delete(fileDB);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(
+                    "Não foi possivel enviar arquivo: " + fileDB.getName() + "!"
+            ));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("O Arquivo " + fileDB.getName() + " foi excluido com sucesso!");
+    }
+
+
     @GetMapping("/file/{id}")
-//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
         FileDB fileDB = filesService.getFile(id);
 

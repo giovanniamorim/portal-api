@@ -1,0 +1,6 @@
+version: '3'
+services:
+  portal-api:
+    image: giovanni052009/portal-api:v1.01
+    ports:
+      - 8080:8080

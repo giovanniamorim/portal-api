@@ -1,6 +1,5 @@
 package org.sindifisco.resource.user;
 
-import org.sindifisco.UsuarioDTO;
 import org.sindifisco.model.ChangePasswordRequest;
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -55,7 +55,8 @@ public class UserResource {
 		return ResponseEntity.ok(userRepository.save(user));
 	}
 
-//	@PutMapping("{codigo}")
+
+//	@PutMapping("/{codigo}")
 //	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 //	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
 //
@@ -70,6 +71,25 @@ public class UserResource {
 //					usuario.setMatricula(userUpdated.getMatricula());
 //					usuario.setSituacao(userUpdated.getSituacao());
 //
+//					LOGGER.info("Valor do userUpdate getSenha:" + userUpdated.getSenha());
+//					LOGGER.info("Valor do usuario getSenha:" + usuario.getSenha());
+//
+//					if(userUpdated.getSenha().isEmpty() || userUpdated.getSenha().isBlank()){
+//						LOGGER.info("userUpdated Está vazio?:" + userUpdated.getSenha().isEmpty());
+//						LOGGER.info("userUpdated Está em branco?:" + userUpdated.getSenha().isBlank());
+//						usuario.setSenha(usuario.getSenha());
+//						usuario.setConfirmarSenha(usuario.getConfirmarSenha());
+//					}
+//					if(userUpdated.getSenha().equals(usuario.getSenha())){
+//						LOGGER.info("uma é igual a outra?" + userUpdated.getSenha().equals(usuario.getSenha()));
+//						usuario.setSenha(usuario.getSenha());
+//					}
+//
+//					if(!userUpdated.getSenha().isEmpty() || !userUpdated.getSenha().isBlank()){
+//						usuario.setSenha(encoder.encode(userUpdated.getSenha()));
+//						usuario.setConfirmarSenha(encoder.encode(userUpdated.getConfirmarSenha()));
+//						LOGGER.info("Caiu terceito if" + usuario);
+//					}
 //
 //					Usuario putUsuario = userRepository.save(usuario);
 //
@@ -78,10 +98,10 @@ public class UserResource {
 //						NOT_FOUND, "Usuário não encontrado"));
 //	}
 
-	@PutMapping("{codigo}")
-	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
 
+	@PutMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated) {
 		return userRepository.findById(codigo)
 				.map(usuario -> {
 					usuario.setNome(userUpdated.getNome());
@@ -93,31 +113,20 @@ public class UserResource {
 					usuario.setMatricula(userUpdated.getMatricula());
 					usuario.setSituacao(userUpdated.getSituacao());
 
-					LOGGER.info("Valor do userUpdate getSenha:" + userUpdated.getSenha());
-					LOGGER.info("Valor do usuario getSenha:" + usuario.getSenha());
+					LOGGER.info("Valor do userUpdated getSenha: {}" + userUpdated.getSenha());
+					LOGGER.info("Valor do usuario getSenha: {}" + usuario.getSenha());
 
-					if(userUpdated.getSenha().isEmpty() || userUpdated.getSenha().isBlank()){
-						LOGGER.info("userUpdated Está vazio?:" + userUpdated.getSenha().isEmpty());
-						LOGGER.info("userUpdated Está em branco?:" + userUpdated.getSenha().isBlank());
-						usuario.setSenha(usuario.getSenha());
-						usuario.setConfirmarSenha(usuario.getConfirmarSenha());
-					}
-					if(userUpdated.getSenha().equals(usuario.getSenha())){
-						LOGGER.info("uma é igual a outra?" + userUpdated.getSenha().equals(usuario.getSenha()));
-						usuario.setSenha(usuario.getSenha());
-					}
-
-					if(!userUpdated.getSenha().isEmpty() || !userUpdated.getSenha().isBlank()){
-						usuario.setSenha(encoder.encode(userUpdated.getSenha()));
-						usuario.setConfirmarSenha(encoder.encode(userUpdated.getConfirmarSenha()));
-						LOGGER.info("Caiu terceito if" + usuario);
+					if (!userUpdated.getSenha().isEmpty() && !userUpdated.getSenha().isBlank()) {
+						String encodedPassword = encoder.encode(userUpdated.getSenha());
+						usuario.setSenha(encodedPassword);
+						usuario.setConfirmarSenha(encodedPassword);
+						LOGGER.info("Password updated");
 					}
 
 					Usuario putUsuario = userRepository.save(usuario);
-
 					return ResponseEntity.ok().body(putUsuario);
-				}).orElseThrow(() -> new ResponseStatusException(
-						NOT_FOUND, "Usuário não encontrado"));
+				})
+				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Usuário não encontrado"));
 	}
 
 	@GetMapping("/{codigo}")
@@ -178,6 +187,7 @@ public class UserResource {
 				}).orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado"));
 	}
+
 
 
 

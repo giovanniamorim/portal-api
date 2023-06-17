@@ -12,35 +12,33 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 
 @EnableResourceServer
 @Profile("oauth-security")
 @SuppressWarnings("deprecation")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
-				.authorizeRequests()
-				.antMatchers("/api/forgot-password**").permitAll()
-				.antMatchers(GET,"/api/file/*").permitAll()
-				.antMatchers("/api/reset-password**").permitAll()
-				.anyRequest().authenticated()
-				.and().csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+			.authorizeRequests()
+			.antMatchers("/api/forgot-password**").permitAll()
+			.antMatchers(GET,"/api/file/*").permitAll()
+			.antMatchers("/api/reset-password**").permitAll()
+			.anyRequest().authenticated()
+			.and().csrf().disable()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http
-				.logout(
-				httpSecurityLogoutConfigurer -> {
-					httpSecurityLogoutConfigurer.logoutSuccessHandler(
-							(httpServletRequest, httpServletResponse, authentication) -> {
-								var origin = httpServletRequest.getHeader("origin");
-								httpServletResponse.sendRedirect(origin);
-							}
-					);
-				}
+			.logout(
+			httpSecurityLogoutConfigurer -> {
+				httpSecurityLogoutConfigurer.logoutSuccessHandler(
+						(httpServletRequest, httpServletResponse, authentication) -> {
+							var origin = httpServletRequest.getHeader("origin");
+							httpServletResponse.sendRedirect(origin);
+						}
+				);
+			}
 		);
 
 	}
@@ -54,4 +52,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public MethodSecurityExpressionHandler createExpressionHandler() {
 		return new OAuth2MethodSecurityExpressionHandler();
 	}
+
 }

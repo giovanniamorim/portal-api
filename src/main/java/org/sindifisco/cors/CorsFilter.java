@@ -33,7 +33,10 @@ public class CorsFilter implements Filter {
 		
 		resp.setHeader("Access-Control-Allow-Origin", apiProperty.getOrigemPermitida());
         resp.setHeader("Access-Control-Allow-Credentials", "true");
-		
+
+		// Adicione o cabeçalho Cache-Control para habilitar o caching
+		resp.setHeader("Cache-Control", "public, max-age=3600"); // Cache por 1 hora (3600 segundos)
+
 		if (OPTIONS.equals(req.getMethod()) && apiProperty.getOrigemPermitida().equals(req.getHeader("Origin"))) {
             resp.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS, HEAD, TRACE, CONNECT");
             resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Content-Length, Accept, reportProgress, responseType");

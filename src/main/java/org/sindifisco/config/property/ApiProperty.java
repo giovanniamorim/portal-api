@@ -2,11 +2,13 @@ package org.sindifisco.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ConfigurationProperties("algamoney")
 public class ApiProperty {
 
-	private String origemPermitida = "https://app-47750.dc-us-1.absamcloud.com";
-//	private String origemPermitida = "http://localhost:3000";
+	private String origemPermitida = "https://www.sindifisco.app.br";
 
 	private final Seguranca seguranca = new Seguranca();
 	
@@ -21,6 +23,7 @@ public class ApiProperty {
 	public void setOrigemPermitida(String origemPermitida) {
 		this.origemPermitida = origemPermitida;
 	}
+
 
 	public static class Seguranca {
 		private boolean enableHttps;
