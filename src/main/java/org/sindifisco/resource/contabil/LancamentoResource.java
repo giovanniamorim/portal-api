@@ -1,6 +1,5 @@
 package org.sindifisco.resource.contabil;
 
-
 import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.lancamento.LancamentoRepository;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
@@ -18,6 +17,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.Table;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
 
@@ -69,7 +72,7 @@ public class LancamentoResource {
     @GetMapping("/despesas")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public Page<Lancamento> getAllDespesas(
-            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC) Pageable pageable){
+            @PageableDefault(page = 0, size = 5, sort = "dataLancamento, desc", direction = Sort.Direction.DESC) Pageable pageable){
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
@@ -80,7 +83,6 @@ public class LancamentoResource {
             LancamentoFilter lancamentoFilter, Pageable pageable){
         return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
-
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
@@ -99,7 +101,12 @@ public class LancamentoResource {
         return lancamentoRepository.findById(id)
                 .map(lancamento -> {
                     lancamento.setTipoLancamento(updatedLancamento.getTipoLancamento());
-                    lancamento.setDataLancamento(updatedLancamento.getDataLancamento());
+
+                    // Converter a data para UTC
+                    LocalDate utcDate = updatedLancamento.getDataLancamento();
+                    ZonedDateTime utcDateTime = utcDate.atStartOfDay(ZoneOffset.UTC).toOffsetDateTime().toZonedDateTime();
+                    lancamento.setDataLancamento(utcDateTime.toLocalDate());
+
                     lancamento.setPlanoConta(updatedLancamento.getPlanoConta());
                     lancamento.setValor((updatedLancamento.getValor()));
                     lancamento.setModoPagamento(updatedLancamento.getModoPagamento());
@@ -117,5 +124,6 @@ public class LancamentoResource {
                 }).orElseThrow(() -> new ResponseStatusException(
                         NOT_FOUND, "Lançamento não encontrado"));
     }
+
 
 }

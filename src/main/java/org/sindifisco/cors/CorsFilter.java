@@ -26,26 +26,33 @@ public class CorsFilter implements Filter {
 	private ApiProperty apiProperty;
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse resp = (HttpServletResponse) response;
-		
-		resp.setHeader("Access-Control-Allow-Origin", apiProperty.getOrigemPermitida());
-        resp.setHeader("Access-Control-Allow-Credentials", "true");
+	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
+			throws IOException, ServletException {
 
-		// Adicione o cabeçalho Cache-Control para habilitar o caching
-		resp.setHeader("Cache-Control", "public, max-age=3600"); // Cache por 1 hora (3600 segundos)
+		HttpServletRequest request = (HttpServletRequest) req;
+		HttpServletResponse response = (HttpServletResponse) resp;
 
-		if (OPTIONS.equals(req.getMethod()) && apiProperty.getOrigemPermitida().equals(req.getHeader("Origin"))) {
-            resp.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS, HEAD, TRACE, CONNECT");
-            resp.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Content-Length, Accept, reportProgress, responseType");
-            resp.setHeader("Access-Control-Max-Age", "3600");
+		response.setHeader("Access-Control-Allow-Origin", apiProperty.getOrigemPermitida());
+		response.setHeader("Access-Control-Allow-Credentials", "true");
 
-            resp.setStatus(HttpServletResponse.SC_OK);
-        } else {
-            chain.doFilter(request, response);
-        }
+		if ("OPTIONS".equals(request.getMethod()) && apiProperty.getOrigemPermitida().equals(request.getHeader("Origin"))) {
+			response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
+			response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept, Cache-Control");
+			response.setHeader("Access-Control-Max-Age", "3600");
+
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Expires", "0");
+			response.setHeader("Pragma", "no-cache");
+
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+			response.setHeader("Expires", "0");
+			response.setHeader("Pragma", "no-cache");
+
+			chain.doFilter(req, resp);
+		}
 	}
+
 
 }

@@ -1,6 +1,5 @@
 package org.sindifisco.repository.lancamento;
 
-
 import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.filter.LancamentoFilter;
 import org.springframework.data.domain.Page;

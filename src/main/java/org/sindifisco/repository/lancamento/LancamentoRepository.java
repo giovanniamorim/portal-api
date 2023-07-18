@@ -10,6 +10,5 @@ import org.springframework.stereotype.Repository;
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long>, LancamentoRepositoryQuery {
 
     Page<Lancamento> findByTipoLancamento(String tipoLancamento, Pageable pageable);
-    
 
 }
