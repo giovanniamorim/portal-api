@@ -36,6 +36,10 @@ public class FileDBService {
         return fileRepository.findByName(name);
     }
 
+    public void delete(FileDB file){
+        fileRepository.delete(file);
+    }
+
 
 
 }

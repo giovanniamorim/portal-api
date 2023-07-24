@@ -1,15 +1,20 @@
 package org.sindifisco.resource.contabil;
 
+import org.sindifisco.message.ResponseMessage;
+import org.sindifisco.model.FileDB;
 import org.sindifisco.model.Lancamento;
+import org.sindifisco.repository.fileDB.FileDBRepository;
 import org.sindifisco.repository.lancamento.LancamentoRepository;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.sindifisco.repository.filter.LancamentoFilter;
+import org.sindifisco.service.FileDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +25,7 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.NoSuchElementException;
 
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
@@ -36,6 +42,12 @@ public class LancamentoResource {
 
     @Autowired
     private PlanoContasRepository planoContasRepository;
+
+    @Autowired
+    private FileDBService fileDBService;
+
+    @Autowired
+    private FileDBRepository fileDBRepository;
 
     @PostMapping()
     @ResponseStatus(CREATED)
@@ -87,13 +99,34 @@ public class LancamentoResource {
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_DELETE') and #oauth2.hasScope('write')")
-    public void deleteLancamento(@PathVariable Long id) {
-        lancamentoRepository.findById(id).map(lancamento -> {
+    public ResponseEntity<String> deleteLancamento(@PathVariable Long id) {
+        try {
+            // Verificar se o lançamento existe
+            Lancamento lancamento = lancamentoRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Lançamento não encontrado"));
+
+            // Deletar o arquivo associado ao lançamento, caso exista
+            String urlArquivo = lancamento.getFileUrl();
+            if (urlArquivo != null && urlArquivo.contains("=")) {
+                String nomeArquivo = urlArquivo.substring(urlArquivo.lastIndexOf("=") + 1);
+                FileDB existingFile = fileDBRepository.findByName(nomeArquivo);
+                if (existingFile != null) {
+                    fileDBService.delete(existingFile);
+                }
+            }
+
+            // Deletar o lançamento
             lancamentoRepository.delete(lancamento);
-            return TYPE;
-        }).orElseThrow(() -> new ResponseStatusException(
-                NOT_FOUND, "Lançamento não encontrado"));
+
+            return ResponseEntity.noContent().build(); // Resposta indicando sucesso
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build(); // Resposta indicando que o lançamento não foi encontrado
+        } catch (Exception e) {
+            String message = "Ocorreu um erro ao deletar o lançamento.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message); // Resposta indicando erro interno
+        }
     }
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
