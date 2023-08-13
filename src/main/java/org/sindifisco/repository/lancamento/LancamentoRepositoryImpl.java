@@ -41,9 +41,27 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
 
         LOGGER.info("Resultado de filtrarDespesas: " + query.getResultList());
 
+        Double totalValor = sumValorByFilter(lancamentoFilter);
+
         return new PageImpl<>(query.getResultList(), pageable, total(lancamentoFilter));
 
     }
+
+    @Override
+    public Double sumValorByFilter(LancamentoFilter lancamentoFilter) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Double> criteria = builder.createQuery(Double.class);
+        Root<Lancamento> root = criteria.from(Lancamento.class);
+
+        Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
+        criteria.where(predicates);
+
+        criteria.select(builder.sum(root.get("valor")));
+
+        TypedQuery<Double> query = manager.createQuery(criteria);
+        return query.getSingleResult();
+    }
+
 
     private Predicate[] criarRestricoes(LancamentoFilter lancamentoFilter, CriteriaBuilder builder,
                                         Root<Lancamento> root) {

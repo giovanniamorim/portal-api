@@ -88,13 +88,27 @@ public class LancamentoResource {
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
+//    @GetMapping("/busca")
+//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+//    public Page<Lancamento> buscaAvancada(
+//            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
+//            LancamentoFilter lancamentoFilter, Pageable pageable){
+//        return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+//    }
+
+
     @GetMapping("/busca")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-    public Page<Lancamento> buscaAvancada(
+    public ResponseEntity<BuscaAvancadaResponse> buscaAvancada(
             @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
-            LancamentoFilter lancamentoFilter, Pageable pageable){
-        return lancamentoRepository.filtrar(lancamentoFilter, pageable);
+            LancamentoFilter lancamentoFilter, Pageable pageable) {
+        Page<Lancamento> lancamentos = lancamentoRepository.filtrar(lancamentoFilter, pageable);
+        Double totalValor = lancamentoRepository.sumValorByFilter(lancamentoFilter);
+
+        BuscaAvancadaResponse response = new BuscaAvancadaResponse(lancamentos, totalValor);
+        return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
@@ -157,6 +171,8 @@ public class LancamentoResource {
                 }).orElseThrow(() -> new ResponseStatusException(
                         NOT_FOUND, "Lançamento não encontrado"));
     }
+
+
 
 
 }
