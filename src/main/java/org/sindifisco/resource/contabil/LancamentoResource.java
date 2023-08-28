@@ -1,5 +1,8 @@
 package org.sindifisco.resource.contabil;
 
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import org.sindifisco.message.ResponseMessage;
 import org.sindifisco.model.FileDB;
 import org.sindifisco.model.Lancamento;
@@ -14,18 +17,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.Table;
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
@@ -88,25 +97,39 @@ public class LancamentoResource {
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
-//    @GetMapping("/busca")
-//    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-//    public Page<Lancamento> buscaAvancada(
-//            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
-//            LancamentoFilter lancamentoFilter, Pageable pageable){
-//        return lancamentoRepository.filtrar(lancamentoFilter, pageable);
-//    }
-
-
     @GetMapping("/busca")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<BuscaAvancadaResponse> buscaAvancada(
             @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
             LancamentoFilter lancamentoFilter, Pageable pageable) {
+
         Page<Lancamento> lancamentos = lancamentoRepository.filtrar(lancamentoFilter, pageable);
         Double totalValor = lancamentoRepository.sumValorByFilter(lancamentoFilter);
 
         BuscaAvancadaResponse response = new BuscaAvancadaResponse(lancamentos, totalValor);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/relatorio")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public ResponseEntity<byte[]> relatorio(LancamentoFilter lancamentoFilter) throws JRException {
+
+        List<Lancamento> lancamentos = lancamentoRepository.filtrarRelatorio(lancamentoFilter);
+
+        // Carregue o template do relatório
+        InputStream jasperStream = getClass().getResourceAsStream("/reports/lancamentos.jasper");
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+        // Preencha o relatório com os dados simulados
+        JasperPrint report = JasperFillManager.fillReport(jasperReport, null, new JRBeanCollectionDataSource(lancamentos));
+
+        // Exporte o relatório para PDF
+        byte[] data = JasperExportManager.exportReportToPdf(report);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=lancamentos.pdf");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
     }
 
 
@@ -171,7 +194,6 @@ public class LancamentoResource {
                 }).orElseThrow(() -> new ResponseStatusException(
                         NOT_FOUND, "Lançamento não encontrado"));
     }
-
 
 
 

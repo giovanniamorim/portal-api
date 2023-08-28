@@ -13,6 +13,7 @@ import java.util.List;
 public interface LancamentoRepositoryQuery {
 
     public Page<Lancamento> filtrar(LancamentoFilter lancamentoFilter, Pageable pageable);
+    public List<Lancamento> filtrarRelatorio(LancamentoFilter lancamentoFilter);
 
     @Query("SELECT COALESCE(SUM(l.valor), 0) FROM Lancamento l " +
             "WHERE (:#{#filter.tipoLancamento} IS NULL OR l.tipoLancamento = :#{#filter.tipoLancamento}) " +

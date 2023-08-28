@@ -3,7 +3,6 @@ package org.sindifisco.service;
 import org.sindifisco.model.FileDB;
 import org.sindifisco.repository.fileDB.FileDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +38,5 @@ public class FileDBService {
     public void delete(FileDB file){
         fileRepository.delete(file);
     }
-
-
 
 }

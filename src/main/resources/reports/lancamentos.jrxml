@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6f27e653-973b-471e-b211-6112200266c8">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <field name="modoPagamento" class="java.lang.String"/>
+    <field name="planoConta" class="java.lang.String"/>
+    <field name="valor" class="java.lang.Double"/>
+    <field name="id" class="java.lang.Long"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="86" splitType="Stretch">
+            <staticText>
+                <reportElement x="20" y="0" width="280" height="50" uuid="da51414e-2584-4f96-8498-2ba23baa6235"/>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Relatório de Lançamentos]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="35" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="61" splitType="Stretch">
+            <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout"/>
+            <staticText>
+                <reportElement x="0" y="27" width="30" height="22" uuid="a8be05b6-0989-4591-9f35-fdca46888506"/>
+                <text><![CDATA[#]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="30" y="27" width="90" height="22" uuid="d4370b84-2eb1-47c0-8806-7e0fa29edb63"/>
+                <text><![CDATA[Plano de Contas]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="120" y="27" width="120" height="22" uuid="d90ca8b5-9954-4485-b80d-dfed6b77a742"/>
+                <text><![CDATA[Mode de Pagamento]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="240" y="27" width="70" height="22" uuid="eedc1d71-f7ba-40ae-97e4-e0ec3edccbca"/>
+                <text><![CDATA[Valor]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="25" splitType="Stretch">
+            <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.spreadsheet.SpreadsheetLayout"/>
+            <textField>
+                <reportElement key="" x="0" y="0" width="30" height="25" uuid="1467d664-fed7-4638-ab2a-9fb4cad4d74b"/>
+                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement key="" x="30" y="0" width="90" height="25" uuid="93bc6d95-1645-4757-9b76-ad0bc4dcbd6e"/>
+                <textFieldExpression><![CDATA[$F{planoConta}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement key="" x="120" y="0" width="120" height="25" uuid="4b879fb8-b56b-4e40-993d-335dc9c11843"/>
+                <textFieldExpression><![CDATA[$F{modoPagamento}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement key="" x="240" y="0" width="70" height="25" uuid="3e6ca0d0-fbc9-4f8d-89d3-61ef840992db"/>
+                <textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

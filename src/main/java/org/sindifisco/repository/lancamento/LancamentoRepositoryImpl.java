@@ -48,6 +48,24 @@ public class LancamentoRepositoryImpl implements LancamentoRepositoryQuery {
     }
 
     @Override
+    public List<Lancamento> filtrarRelatorio(LancamentoFilter lancamentoFilter) {
+        LOGGER.info("Entrou no filtrarDespesas: " + lancamentoFilter);
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Lancamento> criteria = builder.createQuery(Lancamento.class);
+        Root<Lancamento> root = criteria.from(Lancamento.class);
+
+        Predicate[] predicates = criarRestricoes(lancamentoFilter, builder, root);
+        criteria.where(predicates);
+
+        TypedQuery<Lancamento> query = manager.createQuery(criteria);
+
+        LOGGER.info("Resultado de filtrarDespesas: " + query.getResultList());
+
+
+        return query.getResultList();
+    }
+
+    @Override
     public Double sumValorByFilter(LancamentoFilter lancamentoFilter) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Double> criteria = builder.createQuery(Double.class);
