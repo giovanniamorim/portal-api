@@ -3,9 +3,9 @@ package org.sindifisco.resource.contabil;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
-import org.sindifisco.message.ResponseMessage;
 import org.sindifisco.model.FileDB;
 import org.sindifisco.model.Lancamento;
+import org.sindifisco.model.LancamentoAgrupado;
 import org.sindifisco.repository.fileDB.FileDBRepository;
 import org.sindifisco.repository.lancamento.LancamentoRepository;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
@@ -14,6 +14,7 @@ import org.sindifisco.repository.filter.LancamentoFilter;
 import org.sindifisco.service.FileDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -26,17 +27,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.Table;
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static java.lang.Void.TYPE;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -97,6 +97,36 @@ public class LancamentoResource {
         return lancamentoRepository.findByTipoLancamento("Despesa", pageable);
     }
 
+    @GetMapping("/busca-agrupada")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public ResponseEntity<?> buscaAvancadaAgrupada(
+            @RequestParam(name = "groupByMes", defaultValue = "false") boolean agruparPorMes,
+            @PageableDefault(page = 0, size = 5, sort = "dataLancamento", direction = Sort.Direction.DESC)
+            LancamentoFilter lancamentoFilter, Pageable pageable) {
+
+        if (agruparPorMes) {
+            Page<Lancamento> lancamentosAgrupados = agruparLancamentosPorMes(lancamentoFilter, pageable);
+            Double totalValor = lancamentoRepository.sumValorByFilter(lancamentoFilter);
+            BuscaAvancadaResponse response = new BuscaAvancadaResponse((Page<Lancamento>) lancamentosAgrupados.getContent(), totalValor);
+            return ResponseEntity.ok(response);
+        }
+
+        Page<Lancamento> lancamentos = lancamentoRepository.filtrar(lancamentoFilter, pageable);
+
+        Double totalValor = lancamentoRepository.sumValorByFilter(lancamentoFilter);
+
+        BuscaAvancadaResponse response = new BuscaAvancadaResponse((Page<Lancamento>) lancamentos.getContent(), totalValor);
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Função auxiliar para calcular o total dos valores
+    private Double calculateTotal(List<Lancamento> lancamentos) {
+        return lancamentos.stream().mapToDouble(Lancamento::getValor).sum();
+    }
+
+
+
     @GetMapping("/busca")
     @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
     public ResponseEntity<BuscaAvancadaResponse> buscaAvancada(
@@ -130,6 +160,58 @@ public class LancamentoResource {
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=lancamentos.pdf");
 
         return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(data);
+    }
+
+    @GetMapping("/relatorio-agrupado")
+    @PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
+    public ResponseEntity<byte[]> relatorioAgrupado(LancamentoFilter lancamentoFilter) throws JRException {
+        try {
+            List<Lancamento> lancamentos = lancamentoRepository.filtrarRelatorio(lancamentoFilter);
+
+            // Group the entries by month and year, and calculate the sum of values
+            Map<String, Double> somaValoresPorMes = new LinkedHashMap<>();
+            for (Lancamento lancamento : lancamentos) {
+                String mesAno = getMesAno(lancamento.getDataLancamento());
+                somaValoresPorMes.merge(mesAno, lancamento.getValor(), Double::sum);
+            }
+
+            // Create a list of grouped data objects
+            List<LancamentoAgrupado> lancamentosAgrupados = new ArrayList<>();
+            for (Map.Entry<String, Double> entry : somaValoresPorMes.entrySet()) {
+                LancamentoAgrupado lancamentoAgrupado = new LancamentoAgrupado();
+                lancamentoAgrupado.setMesAno(entry.getKey());
+                lancamentoAgrupado.setValorTotal(entry.getValue());
+                lancamentosAgrupados.add(lancamentoAgrupado);
+            }
+
+            // Load the JasperReports template
+            InputStream jasperStream = getClass().getResourceAsStream("/reports/lancamentos_agrupados.jasper");
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
+
+            // Fill the report with grouped data
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lancamentosAgrupados);
+            JasperPrint report = JasperFillManager.fillReport(jasperReport, null, dataSource);
+
+            // Export the report to PDF
+            byte[] data = JasperExportManager.exportReportToPdf(report);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=lancamentos-agrupados.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(data);
+        } catch (Exception e) {
+            // Handle exceptions and return appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Utility method to format date to month/year string
+    private String getMesAno(LocalDate date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+        return sdf.format(date);
     }
 
 
@@ -195,6 +277,21 @@ public class LancamentoResource {
                         NOT_FOUND, "Lançamento não encontrado"));
     }
 
+
+    private Page<Lancamento> agruparLancamentosPorMes(LancamentoFilter lancamentoFilter, Pageable pageable) {
+        Page<Lancamento> lancamentos = lancamentoRepository.filtrar(lancamentoFilter, pageable);
+
+        Map<String, List<Lancamento>> lancamentosAgrupados = lancamentos.getContent()
+                .stream()
+                .collect(Collectors.groupingBy(lancamento ->
+                        YearMonth.from(lancamento.getDataLancamento()).toString()));
+
+        List<Lancamento> lancamentosAgrupadosList = lancamentosAgrupados.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(lancamentosAgrupadosList, pageable, lancamentosAgrupadosList.size());
+    }
 
 
 }
