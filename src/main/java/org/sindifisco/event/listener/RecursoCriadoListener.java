@@ -1,4 +1,4 @@
-package org.sindifisco.event.listener;
+package org.conefisco.event.listener;
 
 import java.net.URI;
 
@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import org.sindifisco.event.RecursoCriadoEvent;
+import org.conefisco.event.RecursoCriadoEvent;
 
 @Component
 public class RecursoCriadoListener implements ApplicationListener<RecursoCriadoEvent> {

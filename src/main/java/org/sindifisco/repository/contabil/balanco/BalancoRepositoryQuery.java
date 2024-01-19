@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.balanco;
+package org.conefisco.repository.contabil.balanco;
 
-import org.sindifisco.model.Balanco;
-import org.sindifisco.repository.filter.BalancoFilter;
+import org.conefisco.model.Balanco;
+import org.conefisco.repository.filter.BalancoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

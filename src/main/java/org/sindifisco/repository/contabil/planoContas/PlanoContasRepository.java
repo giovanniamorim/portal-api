@@ -1,6 +1,6 @@
-package org.sindifisco.repository.contabil.planoContas;
+package org.conefisco.repository.contabil.planoContas;
 
-import org.sindifisco.model.PlanoContas;
+import org.conefisco.model.PlanoContas;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlanoContasRepository extends JpaRepository<PlanoContas, Long> {

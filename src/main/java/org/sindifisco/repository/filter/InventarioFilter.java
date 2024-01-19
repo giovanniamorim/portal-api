@@ -1,4 +1,4 @@
-package org.sindifisco.repository.filter;
+package org.conefisco.repository.filter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

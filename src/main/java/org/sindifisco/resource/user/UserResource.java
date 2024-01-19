@@ -1,7 +1,7 @@
-package org.sindifisco.resource.user;
+package org.conefisco.resource.user;
 
-import org.sindifisco.model.Usuario;
-import org.sindifisco.repository.UsuarioRepository;
+import org.conefisco.model.Usuario;
+import org.conefisco.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

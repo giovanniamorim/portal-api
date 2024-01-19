@@ -1,4 +1,4 @@
-package org.sindifisco.model;
+package org.conefisco.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

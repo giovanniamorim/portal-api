@@ -1,9 +1,9 @@
-package org.sindifisco.repository.projection;
+package org.conefisco.repository.projection;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import org.sindifisco.enums.TipoLancamento;
+import org.conefisco.enums.TipoLancamento;
 
 public class ResumoLancamento {
 

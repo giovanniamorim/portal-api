@@ -1,4 +1,4 @@
-package org.sindifisco.model;
+package org.conefisco.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

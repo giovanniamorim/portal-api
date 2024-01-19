@@ -1,4 +1,4 @@
-package org.sindifisco.repository.lancamento;
+package org.conefisco.repository.lancamento;
 
 import java.util.ArrayList;
 import java.util.List;

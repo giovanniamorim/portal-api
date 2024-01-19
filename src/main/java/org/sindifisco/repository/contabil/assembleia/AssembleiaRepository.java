@@ -1,6 +1,6 @@
-package org.sindifisco.repository.contabil.assembleia;
+package org.conefisco.repository.contabil.assembleia;
 
-import org.sindifisco.model.Assembleia;
+import org.conefisco.model.Assembleia;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AssembleiaRepository extends JpaRepository<Assembleia, Long>, AssembleiaRepositoryQuery {

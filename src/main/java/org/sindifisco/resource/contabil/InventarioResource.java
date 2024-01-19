@@ -1,8 +1,8 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
-import org.sindifisco.model.Inventario;
-import org.sindifisco.repository.contabil.inventario.InventarioRepository;
-import org.sindifisco.repository.filter.InventarioFilter;
+import org.conefisco.model.Inventario;
+import org.conefisco.repository.contabil.inventario.InventarioRepository;
+import org.conefisco.repository.filter.InventarioFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

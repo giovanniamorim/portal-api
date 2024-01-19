@@ -1,10 +1,10 @@
-package org.sindifisco.resource;
+package org.conefisco.resource;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sindifisco.config.property.ApiProperty;
+import org.conefisco.config.property.ApiProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

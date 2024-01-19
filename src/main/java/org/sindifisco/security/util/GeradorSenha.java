@@ -1,4 +1,4 @@
-package org.sindifisco.security.util;
+package org.conefisco.security.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

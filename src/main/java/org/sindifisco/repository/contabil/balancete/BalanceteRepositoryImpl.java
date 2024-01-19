@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.balancete;
+package org.conefisco.repository.contabil.balancete;
 
-import org.sindifisco.model.Balancete;
-import org.sindifisco.repository.filter.BalanceteFilter;
+import org.conefisco.model.Balancete;
+import org.conefisco.repository.filter.BalanceteFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

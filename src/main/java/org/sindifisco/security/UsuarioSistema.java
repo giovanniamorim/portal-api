@@ -1,11 +1,11 @@
-package org.sindifisco.security;
+package org.conefisco.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import org.sindifisco.model.Usuario;
+import org.conefisco.model.Usuario;
 
 public class UsuarioSistema extends User {
 	private static final long serialVersionUID = 1L;

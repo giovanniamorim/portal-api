@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.inventario;
+package org.conefisco.repository.contabil.inventario;
 
-import org.sindifisco.model.Inventario;
-import org.sindifisco.repository.filter.InventarioFilter;
+import org.conefisco.model.Inventario;
+import org.conefisco.repository.filter.InventarioFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

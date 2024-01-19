@@ -1,4 +1,4 @@
-package org.sindifisco.model;
+package org.conefisco.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

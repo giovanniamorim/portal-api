@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.assembleia;
+package org.conefisco.repository.contabil.assembleia;
 
-import org.sindifisco.model.Assembleia;
-import org.sindifisco.repository.filter.AssembleiaFilter;
+import org.conefisco.model.Assembleia;
+import org.conefisco.repository.filter.AssembleiaFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

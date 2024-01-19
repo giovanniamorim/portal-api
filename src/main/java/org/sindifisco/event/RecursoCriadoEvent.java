@@ -1,4 +1,4 @@
-package org.sindifisco.event;
+package org.conefisco.event;
 
 import javax.servlet.http.HttpServletResponse;
 

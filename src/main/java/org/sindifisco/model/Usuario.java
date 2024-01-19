@@ -1,4 +1,4 @@
-package org.sindifisco.model;
+package org.conefisco.model;
 
 import java.util.List;
 

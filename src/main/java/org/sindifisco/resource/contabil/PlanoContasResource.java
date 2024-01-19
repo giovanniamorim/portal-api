@@ -1,7 +1,7 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
-import org.sindifisco.model.PlanoContas;
-import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
+import org.conefisco.model.PlanoContas;
+import org.conefisco.repository.contabil.planoContas.PlanoContasRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

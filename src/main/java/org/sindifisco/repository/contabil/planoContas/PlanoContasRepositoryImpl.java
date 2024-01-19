@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.planoContas;
+package org.conefisco.repository.contabil.planoContas;
 
-import org.sindifisco.model.PlanoContas;
-import org.sindifisco.repository.filter.PlanoContasFilter;
+import org.conefisco.model.PlanoContas;
+import org.conefisco.repository.filter.PlanoContasFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

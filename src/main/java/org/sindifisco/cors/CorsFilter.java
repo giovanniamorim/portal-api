@@ -1,4 +1,4 @@
-package org.sindifisco.cors;
+package org.conefisco.cors;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.sindifisco.config.property.ApiProperty;
+import org.conefisco.config.property.ApiProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

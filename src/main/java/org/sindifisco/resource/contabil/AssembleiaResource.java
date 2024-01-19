@@ -1,9 +1,9 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
 
-import org.sindifisco.model.Assembleia;
-import org.sindifisco.repository.contabil.assembleia.AssembleiaRepository;
-import org.sindifisco.repository.filter.AssembleiaFilter;
+import org.conefisco.model.Assembleia;
+import org.conefisco.repository.contabil.assembleia.AssembleiaRepository;
+import org.conefisco.repository.filter.AssembleiaFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,10 +1,10 @@
-package org.sindifisco;
+package org.conefisco;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import org.sindifisco.config.property.ApiProperty;
+import org.conefisco.config.property.ApiProperty;
 
 @SpringBootApplication
 @EnableConfigurationProperties(ApiProperty.class)

@@ -1,4 +1,4 @@
-package org.sindifisco.enums;
+package org.conefisco.enums;
 
 public enum TipoLancamento {
 

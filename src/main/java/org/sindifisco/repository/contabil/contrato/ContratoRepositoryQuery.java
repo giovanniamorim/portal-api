@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.contrato;
+package org.conefisco.repository.contabil.contrato;
 
-import org.sindifisco.model.Contrato;
-import org.sindifisco.repository.filter.ContratoFilter;
+import org.conefisco.model.Contrato;
+import org.conefisco.repository.filter.ContratoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

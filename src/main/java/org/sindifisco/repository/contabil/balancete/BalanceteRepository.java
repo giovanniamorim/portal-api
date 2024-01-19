@@ -1,6 +1,6 @@
-package org.sindifisco.repository.contabil.balancete;
+package org.conefisco.repository.contabil.balancete;
 
-import org.sindifisco.model.Balancete;
+import org.conefisco.model.Balancete;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BalanceteRepository extends JpaRepository<Balancete, Long>, BalanceteRepositoryQuery {

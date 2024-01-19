@@ -1,4 +1,4 @@
-package org.sindifisco.model;
+package org.conefisco.model;
 
 public enum RoleEnum {
 

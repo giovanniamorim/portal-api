@@ -1,4 +1,4 @@
-package org.sindifisco.config.property;
+package org.conefisco.config.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

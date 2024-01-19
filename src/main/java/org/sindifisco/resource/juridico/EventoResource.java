@@ -1,8 +1,8 @@
-package org.sindifisco.resource.juridico;
+package org.conefisco.resource.juridico;
 
 
-import org.sindifisco.model.Evento;
-import org.sindifisco.repository.juridico.processo.EventoRepository;
+import org.conefisco.model.Evento;
+import org.conefisco.repository.juridico.processo.EventoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

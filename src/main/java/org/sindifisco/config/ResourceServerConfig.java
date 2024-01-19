@@ -1,4 +1,4 @@
-package org.sindifisco.config;
+package org.conefisco.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;

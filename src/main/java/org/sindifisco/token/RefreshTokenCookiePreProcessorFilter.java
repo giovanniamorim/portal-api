@@ -1,4 +1,4 @@
-package org.sindifisco.token;
+package org.conefisco.token;
 
 import java.io.IOException;
 import java.util.Map;

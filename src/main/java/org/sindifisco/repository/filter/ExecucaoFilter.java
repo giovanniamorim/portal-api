@@ -1,4 +1,4 @@
-package org.sindifisco.repository.filter;
+package org.conefisco.repository.filter;
 
 import lombok.Getter;
 import lombok.Setter;

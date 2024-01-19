@@ -1,10 +1,10 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.sindifisco.model.Contrato;
-import org.sindifisco.repository.contabil.contrato.ContratoRepository;
-import org.sindifisco.repository.filter.ContratoFilter;
+import org.conefisco.model.Contrato;
+import org.conefisco.repository.contabil.contrato.ContratoRepository;
+import org.conefisco.repository.filter.ContratoFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

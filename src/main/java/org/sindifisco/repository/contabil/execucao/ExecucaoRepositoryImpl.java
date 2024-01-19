@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.execucao;
+package org.conefisco.repository.contabil.execucao;
 
-import org.sindifisco.model.Execucao;
-import org.sindifisco.repository.filter.ExecucaoFilter;
+import org.conefisco.model.Execucao;
+import org.conefisco.repository.filter.ExecucaoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

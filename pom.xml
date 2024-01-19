@@ -5,13 +5,13 @@
 		 					 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.sindifisco</groupId>
+	<groupId>org.conefisco</groupId>
 	
-	<artifactId>sindifisco</artifactId>
+	<artifactId>conefisco</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>sindifisco</name>
-	<description>Portal Sindifisco</description>
+	<name>conefisco</name>
+	<description>Portal Conefisco</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

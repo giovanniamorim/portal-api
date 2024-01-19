@@ -1,4 +1,4 @@
-package org.sindifisco.config;
+package org.conefisco.config;
 
 import java.util.Arrays;
 
@@ -17,7 +17,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import org.sindifisco.config.token.CustomTokenEnhancer;
+import org.conefisco.config.token.CustomTokenEnhancer;
 
 @Configuration
 @EnableAuthorizationServer

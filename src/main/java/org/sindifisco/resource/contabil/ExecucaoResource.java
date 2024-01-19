@@ -1,9 +1,9 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
 
-import org.sindifisco.model.Execucao;
-import org.sindifisco.repository.contabil.execucao.ExecucaoRepository;
-import org.sindifisco.repository.filter.ExecucaoFilter;
+import org.conefisco.model.Execucao;
+import org.conefisco.repository.contabil.execucao.ExecucaoRepository;
+import org.conefisco.repository.filter.ExecucaoFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

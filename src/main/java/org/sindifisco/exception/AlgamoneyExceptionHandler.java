@@ -1,4 +1,4 @@
-package org.sindifisco.exception;
+package org.conefisco.exception;
 
 import java.util.ArrayList;
 import java.util.Arrays;

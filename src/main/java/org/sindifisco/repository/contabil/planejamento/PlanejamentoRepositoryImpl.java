@@ -1,7 +1,7 @@
-package org.sindifisco.repository.contabil.planejamento;
+package org.conefisco.repository.contabil.planejamento;
 
-import org.sindifisco.model.Planejamento;
-import org.sindifisco.repository.filter.PlanejamentoFilter;
+import org.conefisco.model.Planejamento;
+import org.conefisco.repository.filter.PlanejamentoFilter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

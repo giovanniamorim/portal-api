@@ -1,9 +1,9 @@
-package org.sindifisco.resource.contabil;
+package org.conefisco.resource.contabil;
 
 
-import org.sindifisco.model.Balanco;
-import org.sindifisco.repository.contabil.balanco.BalancoRepository;
-import org.sindifisco.repository.filter.BalancoFilter;
+import org.conefisco.model.Balanco;
+import org.conefisco.repository.contabil.balanco.BalancoRepository;
+import org.conefisco.repository.filter.BalancoFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

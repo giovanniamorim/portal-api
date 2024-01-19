@@ -1,11 +1,11 @@
-package org.sindifisco.repository;
+package org.conefisco.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import org.sindifisco.model.Usuario;
+import org.conefisco.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
