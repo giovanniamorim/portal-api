@@ -1,11 +1,7 @@
 package org.sindifisco.resource.contabil;
 
-
-import org.sindifisco.model.Assembleia;
 import org.sindifisco.model.Balanco;
 import org.sindifisco.repository.contabil.balanco.BalancoRepository;
-import org.sindifisco.repository.filter.BalancoFilter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +19,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/balancos")
-@Slf4j
 public class BalancoResource {
     @Autowired
     BalancoRepository balancoRepository;

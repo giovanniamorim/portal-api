@@ -1,7 +1,5 @@
 package org.sindifisco.resource.documentos;
 
-
-import lombok.extern.slf4j.Slf4j;
 import org.sindifisco.model.Regimento;
 import org.sindifisco.repository.documentos.regimento.RegimentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/regimentos")
-@Slf4j
 public class RegimentoResource {
     @Autowired
     RegimentoRepository regimentoRepository;

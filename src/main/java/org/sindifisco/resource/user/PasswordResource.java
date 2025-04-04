@@ -1,11 +1,8 @@
 package org.sindifisco.resource.user;
 
-import lombok.RequiredArgsConstructor;
-import org.sindifisco.message.ResponseMessage;
 import org.sindifisco.model.ChangePasswordRequest;
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +17,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping("/api/password")
-@RequiredArgsConstructor
 public class PasswordResource {
 
     private UsuarioRepository userRepository;

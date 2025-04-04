@@ -1,12 +1,5 @@
 package org.sindifisco.repository.filter;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.Date;
-
-@Getter
-@Setter
 public class PlanoContasFilter {
 
 	private String codigo;
@@ -14,4 +7,35 @@ public class PlanoContasFilter {
 	private String profundidade;
 	private String tipoLancamento;
 
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getProfundidade() {
+		return profundidade;
+	}
+
+	public void setProfundidade(String profundidade) {
+		this.profundidade = profundidade;
+	}
+
+	public String getTipoLancamento() {
+		return tipoLancamento;
+	}
+
+	public void setTipoLancamento(String tipoLancamento) {
+		this.tipoLancamento = tipoLancamento;
+	}
 }

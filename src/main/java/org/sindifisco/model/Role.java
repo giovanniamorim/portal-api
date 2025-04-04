@@ -1,14 +1,8 @@
 package org.sindifisco.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -20,4 +14,19 @@ public class Role {
 	@Column(length = 20)
 	private RoleEnum name;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public RoleEnum getName() {
+		return name;
+	}
+
+	public void setName(RoleEnum name) {
+		this.name = name;
+	}
 }

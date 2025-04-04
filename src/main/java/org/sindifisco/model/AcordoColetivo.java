@@ -1,16 +1,10 @@
 package org.sindifisco.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "doc_acordo")
 public class AcordoColetivo {
 
@@ -21,4 +15,35 @@ public class AcordoColetivo {
     private String descricao;
     private String fileUrl;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDataAprovacao() {
+        return dataAprovacao;
+    }
+
+    public void setDataAprovacao(Date dataAprovacao) {
+        this.dataAprovacao = dataAprovacao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
 }

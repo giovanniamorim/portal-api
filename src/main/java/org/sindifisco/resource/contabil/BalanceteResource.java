@@ -2,10 +2,7 @@ package org.sindifisco.resource.contabil;
 
 
 import org.sindifisco.model.Balancete;
-import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.contabil.balancete.BalanceteRepository;
-import org.sindifisco.repository.filter.BalanceteFilter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +20,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/balancetes")
-@Slf4j
 public class BalanceteResource {
     @Autowired
     BalanceteRepository balanceteRepository;

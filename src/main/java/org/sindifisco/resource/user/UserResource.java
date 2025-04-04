@@ -1,10 +1,8 @@
 package org.sindifisco.resource.user;
 
-import org.sindifisco.UsuarioDTO;
 import org.sindifisco.model.ChangePasswordRequest;
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.sindifisco.security.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,16 +24,18 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@RequiredArgsConstructor
 public class UserResource {
 
-	@Autowired
 	private final UsuarioRepository userRepository;
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	private final AppUserDetailsService appUserDetailsService;
+	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	private static final Logger LOGGER = Logger.getLogger("InfoLogging");
 
 	@Autowired
-	private final AppUserDetailsService appUserDetailsService;
-	private static Logger LOGGER = Logger.getLogger("InfoLogging");
+	public UserResource(UsuarioRepository userRepository, AppUserDetailsService appUserDetailsService) {
+		this.userRepository = userRepository;
+		this.appUserDetailsService = appUserDetailsService;
+	}
 
 	@GetMapping()
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
@@ -54,29 +54,6 @@ public class UserResource {
 		user.setConfirmarSenha(encoder.encode(user.getConfirmarSenha()));
 		return ResponseEntity.ok(userRepository.save(user));
 	}
-
-//	@PutMapping("{codigo}")
-//	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-//	public ResponseEntity<?> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
-//
-//		return userRepository.findById(codigo)
-//				.map(usuario -> {
-//					usuario.setNome(userUpdated.getNome());
-//					usuario.setEmail(userUpdated.getEmail());
-//					usuario.setCelular(userUpdated.getCelular());
-//					usuario.setCpf(userUpdated.getCpf());
-//					usuario.setRg(userUpdated.getRg());
-//					usuario.setRgOrgaoExp(userUpdated.getRgOrgaoExp());
-//					usuario.setMatricula(userUpdated.getMatricula());
-//					usuario.setSituacao(userUpdated.getSituacao());
-//
-//
-//					Usuario putUsuario = userRepository.save(usuario);
-//
-//					return ResponseEntity.ok().body(putUsuario);
-//				}).orElseThrow(() -> new ResponseStatusException(
-//						NOT_FOUND, "Usuário não encontrado"));
-//	}
 
 	@PutMapping("{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
@@ -97,20 +74,15 @@ public class UserResource {
 					LOGGER.info("Valor do usuario getSenha:" + usuario.getSenha());
 
 					if(userUpdated.getSenha().isEmpty() || userUpdated.getSenha().isBlank()){
-						LOGGER.info("userUpdated Está vazio?:" + userUpdated.getSenha().isEmpty());
-						LOGGER.info("userUpdated Está em branco?:" + userUpdated.getSenha().isBlank());
 						usuario.setSenha(usuario.getSenha());
 						usuario.setConfirmarSenha(usuario.getConfirmarSenha());
 					}
 					if(userUpdated.getSenha().equals(usuario.getSenha())){
-						LOGGER.info("uma é igual a outra?" + userUpdated.getSenha().equals(usuario.getSenha()));
 						usuario.setSenha(usuario.getSenha());
 					}
-
 					if(!userUpdated.getSenha().isEmpty() || !userUpdated.getSenha().isBlank()){
 						usuario.setSenha(encoder.encode(userUpdated.getSenha()));
 						usuario.setConfirmarSenha(encoder.encode(userUpdated.getConfirmarSenha()));
-						LOGGER.info("Caiu terceito if" + usuario);
 					}
 
 					Usuario putUsuario = userRepository.save(usuario);
@@ -132,9 +104,7 @@ public class UserResource {
 	@ResponseBody
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 	public Optional<Usuario> findByEmail(@RequestParam("email") String email) {
-		Optional<Usuario> usuario = userRepository.findByEmail(email);
-
-		return usuario;
+		return userRepository.findByEmail(email);
 	}
 
 	@DeleteMapping("/{codigo}")
@@ -159,12 +129,10 @@ public class UserResource {
 
 		// Check if old password matches
 		if (!encoder.matches(request.getOldPassword(), userCheck.getSenha())) {
-			LOGGER.info("Verificou senha antiga");
 			return ResponseEntity.badRequest().body("Senha antiga não confere");
 		}
 		// Check if new password and confirmation match
 		if (!request.getNewPassword().equals(request.getConfirmPassword())) {
-			LOGGER.info("Confirmação de senha verificada");
 			return ResponseEntity.badRequest().body("Erro ao confirmar a senha nova");
 		}
 
@@ -178,9 +146,4 @@ public class UserResource {
 				}).orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado"));
 	}
-
-
-
-
-
 }

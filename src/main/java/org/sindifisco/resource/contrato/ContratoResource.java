@@ -1,6 +1,5 @@
 package org.sindifisco.resource.contrato;
 
-import lombok.extern.slf4j.Slf4j;
 import org.sindifisco.model.Contrato;
 import org.sindifisco.repository.contabil.contrato.ContratoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/contratos")
-@Slf4j
 public class ContratoResource {
     @Autowired
     ContratoRepository contratoRepository;

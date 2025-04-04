@@ -2,6 +2,7 @@ package org.sindifisco.config;
 
 import java.util.Arrays;
 
+import org.sindifisco.config.token.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
-import org.sindifisco.config.token.CustomTokenEnhancer;
+
 
 @Configuration
 @EnableAuthorizationServer
@@ -61,7 +62,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Bean
 	public JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-		accessTokenConverter.setSigningKey("algaworks");
+		accessTokenConverter.setSigningKey("sindifisco");
 		
 		return accessTokenConverter;
 	}

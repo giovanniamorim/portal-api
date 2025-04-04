@@ -1,6 +1,5 @@
 package org.sindifisco.resource.fileDB;
 
-import lombok.RequiredArgsConstructor;
 import org.sindifisco.message.ResponseFile;
 import org.sindifisco.message.ResponseMessage;
 import org.sindifisco.model.FileDB;
@@ -30,7 +29,6 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class FileDBResource {
 
     @Autowired

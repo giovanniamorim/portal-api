@@ -1,10 +1,7 @@
 package org.sindifisco.resource.contabil;
 
-import org.sindifisco.model.Balancete;
 import org.sindifisco.model.Inventario;
 import org.sindifisco.repository.contabil.inventario.InventarioRepository;
-import org.sindifisco.repository.filter.InventarioFilter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +19,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/inventario")
-@Slf4j
 public class InventarioResource {
     @Autowired
     InventarioRepository inventarioRepository;

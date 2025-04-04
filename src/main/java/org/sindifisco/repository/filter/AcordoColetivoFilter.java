@@ -1,15 +1,26 @@
 package org.sindifisco.repository.filter;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
-@Getter
-@Setter
+
 public class AcordoColetivoFilter {
 
 	private Date dataAprovacao;
 	private String descricao;
 
+	public Date getDataAprovacao() {
+		return dataAprovacao;
+	}
+
+	public void setDataAprovacao(Date dataAprovacao) {
+		this.dataAprovacao = dataAprovacao;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
 }
