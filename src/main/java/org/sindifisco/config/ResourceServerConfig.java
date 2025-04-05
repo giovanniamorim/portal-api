@@ -12,44 +12,66 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 
+
+import java.util.Arrays;
+
+import org.sindifisco.config.property.ApiProperty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 @EnableResourceServer
 @Profile("oauth-security")
-@SuppressWarnings("deprecation")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@SuppressWarnings("deprecation")
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-	
+
+	@Autowired
+	private ApiProperty apiProperty;
+
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
+				.cors().and()
 				.authorizeRequests()
-				.antMatchers(HttpMethod.GET,"/api/file/*")
-				.permitAll()
+				.antMatchers(HttpMethod.GET,"/api/file/*").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.csrf().disable()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-		http
-				.logout(
-				httpSecurityLogoutConfigurer -> {
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.and()
+				.logout(httpSecurityLogoutConfigurer -> {
 					httpSecurityLogoutConfigurer.logoutSuccessHandler(
-							(httpServletRequest, httpServletResponse, authentication) -> {
-								var origin = httpServletRequest.getHeader("origin");
-								httpServletResponse.sendRedirect(origin);
+							(request, response, authentication) -> {
+								var origin = request.getHeader("origin");
+								response.sendRedirect(origin);
 							}
 					);
-				}
-		);
-
+				});
 	}
 
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 		resources.stateless(true);
 	}
-	
+
 	@Bean
 	public MethodSecurityExpressionHandler createExpressionHandler() {
 		return new OAuth2MethodSecurityExpressionHandler();
+	}
+
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(apiProperty.getOrigensPermitidas());
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		configuration.setAllowCredentials(true);
+		configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 }
