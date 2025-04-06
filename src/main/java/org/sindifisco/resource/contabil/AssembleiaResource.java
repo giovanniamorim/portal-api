@@ -2,10 +2,8 @@ package org.sindifisco.resource.contabil;
 
 
 import org.sindifisco.model.Assembleia;
-import org.sindifisco.model.Balancete;
 import org.sindifisco.repository.contabil.assembleia.AssembleiaRepository;
 import org.sindifisco.repository.filter.AssembleiaFilter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +21,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/assembleias")
-@Slf4j
 public class AssembleiaResource {
     @Autowired
     AssembleiaRepository assembleiaRepository;

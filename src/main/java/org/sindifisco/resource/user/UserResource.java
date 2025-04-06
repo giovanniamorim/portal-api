@@ -2,7 +2,6 @@ package org.sindifisco.resource.user;
 
 import org.sindifisco.model.Usuario;
 import org.sindifisco.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.sindifisco.security.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,36 +22,35 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@RequiredArgsConstructor
 public class UserResource {
 
-	@Autowired
 	private final UsuarioRepository userRepository;
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	private final AppUserDetailsService appUserDetailsService;
+	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Autowired
-	private final AppUserDetailsService appUserDetailsService;
-
+	public UserResource(UsuarioRepository userRepository, AppUserDetailsService appUserDetailsService) {
+		this.userRepository = userRepository;
+		this.appUserDetailsService = appUserDetailsService;
+	}
 
 	@GetMapping()
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
-	public Page<Usuario> listAllUsers(@PageableDefault(size = 5, sort = "codigo", direction = Sort.Direction.DESC) Pageable pageable){
+	public Page<Usuario> listAllUsers(@PageableDefault(size = 5, sort = "codigo", direction = Sort.Direction.DESC) Pageable pageable) {
 		return userRepository.findAll(pageable);
 	}
-
 
 	@PostMapping
 	@ResponseStatus(CREATED)
 	@PreAuthorize("hasAnyAuthority('ROLE_CREATE') and #oauth2.hasScope('write')")
-	public Usuario addUsuario(@RequestBody @Valid Usuario user)  {
+	public Usuario addUsuario(@RequestBody @Valid Usuario user) {
 		user.setSenha(encoder.encode(user.getSenha()));
 		return userRepository.save(user);
 	}
 
 	@PutMapping("{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_UPDATE') and #oauth2.hasScope('write')")
-	public ResponseEntity<Usuario> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated){
-
+	public ResponseEntity<Usuario> editUser(@PathVariable Long codigo, @Valid @RequestBody Usuario userUpdated) {
 		return userRepository.findById(codigo)
 				.map(usuario -> {
 					usuario.setNome(userUpdated.getNome());
@@ -71,7 +69,6 @@ public class UserResource {
 					return ResponseEntity.ok().body(putUsuario);
 				}).orElseThrow(() -> new ResponseStatusException(
 						NOT_FOUND, "Usuário não encontrado"));
-
 	}
 
 	@GetMapping("/{codigo}")
@@ -86,9 +83,7 @@ public class UserResource {
 	@ResponseBody
 	@PreAuthorize("hasAuthority('ROLE_READ') and #oauth2.hasScope('read')")
 	public Optional<Usuario> findByEmail(@RequestParam("email") String email) {
-		Optional<Usuario> usuario = userRepository.findByEmail(email);
-
-		return usuario;
+		return userRepository.findByEmail(email);
 	}
 
 	@DeleteMapping("/{codigo}")
@@ -101,5 +96,4 @@ public class UserResource {
 		}).orElseThrow(() -> new ResponseStatusException(
 				NOT_FOUND, "Usuário não encontrado"));
 	}
-
 }

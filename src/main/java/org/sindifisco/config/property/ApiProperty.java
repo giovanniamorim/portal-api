@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
-@ConfigurationProperties("algamoney")
+@ConfigurationProperties("sindifisco")
 public class ApiProperty {
 
 	private List<String> origensPermitidas = List.of(

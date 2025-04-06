@@ -1,11 +1,26 @@
 package org.sindifisco.repository.filter;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class BalancoFilter {
+
 	private Long ano;
 	private String mes;
+
+	public BalancoFilter() {
+	}
+
+	public Long getAno() {
+		return ano;
+	}
+
+	public void setAno(Long ano) {
+		this.ano = ano;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
 }

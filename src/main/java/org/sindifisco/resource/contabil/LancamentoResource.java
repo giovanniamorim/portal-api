@@ -4,7 +4,6 @@ package org.sindifisco.resource.contabil;
 import org.sindifisco.model.Lancamento;
 import org.sindifisco.repository.LancamentoRepository;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +25,6 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @Table(name = "ctb_lancamento")
 @RequestMapping("/api/lancamentos")
-@Slf4j
 public class LancamentoResource {
     @Autowired
     LancamentoRepository lancamentoRepository;

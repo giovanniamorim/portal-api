@@ -1,6 +1,5 @@
 package org.sindifisco.resource.fileDB;
 
-import lombok.RequiredArgsConstructor;
 import org.sindifisco.message.ResponseFile;
 import org.sindifisco.message.ResponseMessage;
 import org.sindifisco.model.FileDB;
@@ -29,19 +28,21 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class FileDBResource {
 
-    @Autowired
-    private FileDBService filesService;
+    private final FileDBService filesService;
+    private final FileDBRepository fileDBRepository;
 
     @Autowired
-    private FileDBRepository fileDBRepository;
+    public FileDBResource(FileDBService filesService, FileDBRepository fileDBRepository) {
+        this.filesService = filesService;
+        this.fileDBRepository = fileDBRepository;
+    }
 
     @PostMapping("/files/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-        if(fileDBRepository.existsByName(file.getOriginalFilename())){
+        if (fileDBRepository.existsByName(file.getOriginalFilename())) {
             message = "Já existe um arquivo com o nome: " + file.getOriginalFilename() + ". Acesse o gerenciador de arquivos e delete-o primeiramente";
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } else {
@@ -50,21 +51,16 @@ public class FileDBResource {
                 message = "Arquivo enviado com sucesso: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } catch (Exception e) {
-                message = "Não foi possivel enviar arquivo: " + file.getOriginalFilename() + "!";
+                message = "Não foi possível enviar o arquivo: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             }
         }
-
     }
 
     @GetMapping("/files/list")
-    public Page<FileDB> getAll(
-            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
-            Pageable pageable){
+    public Page<FileDB> getAll(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return fileDBRepository.findAll(pageable);
     }
-
-
 
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
@@ -72,14 +68,15 @@ public class FileDBResource {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/api/file/find?name=")
-                    .path((dbFile.getName()))
+                    .path(dbFile.getName())
                     .toUriString();
 
             return new ResponseFile(
                     dbFile.getName(),
                     fileDownloadUri,
                     dbFile.getType(),
-                    dbFile.getData().length);
+                    dbFile.getData().length
+            );
         }).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(files);
@@ -105,7 +102,10 @@ public class FileDBResource {
 
     @PutMapping("/file/{id}")
     public ResponseEntity<FileDB> updateFile(
-            @PathVariable Long id, @Valid @RequestBody FileDB newFileDB, @RequestParam("file") MultipartFile file){
+            @PathVariable Long id,
+            @Valid @RequestBody FileDB newFileDB,
+            @RequestParam("file") MultipartFile file) {
+
         return fileDBRepository.findById(id)
                 .map(fileDB -> {
                     fileDB.setName(newFileDB.getName());
@@ -114,8 +114,7 @@ public class FileDBResource {
 
                     FileDB fileDBUpdated = fileDBRepository.save(fileDB);
                     return ResponseEntity.ok().body(fileDBUpdated);
-                }).orElseThrow(() -> new ResponseStatusException(
-                        NOT_FOUND, "Arquivo não encontrado"));
+                }).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Arquivo não encontrado"));
     }
 
     @DeleteMapping("/file/{id}")
@@ -124,9 +123,6 @@ public class FileDBResource {
         fileDBRepository.findById(id).map(fileDB -> {
             fileDBRepository.delete(fileDB);
             return TYPE;
-        }).orElseThrow(() -> new ResponseStatusException(
-                NOT_FOUND, "Arquivo não encontrado"));
+        }).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Arquivo não encontrado"));
     }
-
-
 }

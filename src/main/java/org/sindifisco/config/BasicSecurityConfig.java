@@ -25,7 +25,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
-	@Value("${algamoney.origem-permitida}")
+	@Value("${sindifisco.origem-permitida}")
 	private String origemPermitida;
 
 	@Override

@@ -1,9 +1,7 @@
 package org.sindifisco.resource.contabil;
 
-import org.sindifisco.model.Planejamento;
 import org.sindifisco.model.PlanoContas;
 import org.sindifisco.repository.contabil.planoContas.PlanoContasRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/planocontas")
-@Slf4j
 public class PlanoContasResource {
     @Autowired
     PlanoContasRepository planoContasRepository;

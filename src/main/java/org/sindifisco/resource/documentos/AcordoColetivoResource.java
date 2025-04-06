@@ -1,7 +1,5 @@
 package org.sindifisco.resource.documentos;
 
-
-import lombok.extern.slf4j.Slf4j;
 import org.sindifisco.model.AcordoColetivo;
 import org.sindifisco.repository.documentos.acordo.AcordoColetivoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/acordos")
-@Slf4j
 public class AcordoColetivoResource {
     @Autowired
     AcordoColetivoRepository acordoRepository;

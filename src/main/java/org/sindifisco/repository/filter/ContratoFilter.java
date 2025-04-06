@@ -1,12 +1,17 @@
 package org.sindifisco.repository.filter;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.Date;
-
-@Getter
-@Setter
 public class ContratoFilter {
+
 	private String prestador;
+
+	public ContratoFilter() {
+	}
+
+	public String getPrestador() {
+		return prestador;
+	}
+
+	public void setPrestador(String prestador) {
+		this.prestador = prestador;
+	}
 }
